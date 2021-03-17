@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         button.setOnClickListener {
             val txt = editTextTextPersonName.text?.toString() ?: ""
             //viewModel.getSuggest(txt)
-            viewModel.searchItems(txt, "0")
+            viewModel.searchItems(txt, 0)
         }
     }
 

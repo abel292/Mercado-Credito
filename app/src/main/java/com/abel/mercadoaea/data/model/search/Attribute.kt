@@ -6,8 +6,8 @@ data class Attribute(
     val id: String,
     val name: String,
     val source: Long,
-    val value_id: Any,
+    val value_id: String,
     val value_name: String,
-    val value_struct: Any,
+    val value_struct: Struct?,
     val values: List<Value>
 )

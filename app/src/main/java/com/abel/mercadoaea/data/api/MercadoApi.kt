@@ -22,9 +22,10 @@ interface MercadoApi {
 
     @GET("/sites/MLA/search")
     suspend fun getListSearchedItems(
-        @Query("limit") limit: String,
-        @Query("offset") offset: String,
-        @Query("q") q: String
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+        @Query("q") q: String,
+        @Query("attributes") attributes: String
     ): Response<ResponseSearch>
 
     @GET("/items/{idItem}/description?api_version=2")

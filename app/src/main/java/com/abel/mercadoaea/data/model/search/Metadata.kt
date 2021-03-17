@@ -1,4 +1,6 @@
 package com.abel.mercadoaea.data.model.search
 
-class Metadata(
+data class Metadata(
+    val promotion_id: String,
+    val promotion_type: String
 )

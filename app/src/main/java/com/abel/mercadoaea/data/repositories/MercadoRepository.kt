@@ -1,5 +1,6 @@
 package com.abel.mercadoaea.data.repositories
 
+import com.abel.mercadoaea.data.api.ContsApi.Companion.LIMIT_SEARCH
 import com.abel.mercadoaea.data.api.ContsApi.Companion.V_API
 import com.abel.mercadoaea.data.api.ContsApi.Companion.LIMIT_SUGGEST
 import com.abel.mercadoaea.data.api.MercadoApi
@@ -40,8 +41,8 @@ class MercadoRepository(private val mercadoApi: MercadoApi) {
         emit(resourceSuggest)
     }
 
-    suspend fun getListSearchedItems(q: String, offset: String) = flow {
-        val result = mercadoApi.getListSearchedItems("1", "0", "samsung j2 pri")
+    suspend fun getListSearchedItems(q: String, offset: Int) = flow {
+        val result = mercadoApi.getListSearchedItems(LIMIT_SEARCH, offset, q, "results")
         when (result.code()) {
             200 -> {
                 resourceSearch.resourceObject = result.body()
@@ -54,9 +55,6 @@ class MercadoRepository(private val mercadoApi: MercadoApi) {
         resourceSearch.loading = false
         emit(resourceSearch)
 
-    }.catch {
-        resourceSearch.responseAction = ERROR
-        emit(resourceSearch)
     }
 
     suspend fun getDescriptionApi(idItem: String) = flow {

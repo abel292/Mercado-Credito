@@ -27,7 +27,7 @@ class MercadoViewModel(private val mercadoRepository: MercadoRepository) : ViewM
         }
     }
 
-    fun searchItems(q: String, offset: String) {
+    fun searchItems(q: String, offset: Int) {
         viewModelScope.launch {
             mercadoRepository.getListSearchedItems(q, offset).collect {
                 resourceSearchLive.value = it
