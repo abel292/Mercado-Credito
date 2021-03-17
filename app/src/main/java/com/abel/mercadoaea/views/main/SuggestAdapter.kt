@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.abel.mercadoaea.R
-import com.abel.mercadoaea.data.model.search.Result
+import com.abel.mercadoaea.data.model.suggest.SuggestedQuery
 
 //TODO ADAPTER
-class SearchAdapter(callback: SuggestCallback = SuggestCallback()) :
-    ListAdapter<Result, SuggestViewHolder>(callback) {
+class SuggestAdapter(callback: SuggestCallback = SuggestCallback()) :
+    ListAdapter<SuggestedQuery, SuggestViewHolder>(callback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -32,15 +32,15 @@ class SearchAdapter(callback: SuggestCallback = SuggestCallback()) :
 
 //TODO CALLBACK
 class SuggestCallback :
-    DiffUtil.ItemCallback<Result>() {
+    DiffUtil.ItemCallback<SuggestedQuery>() {
 
-    override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean {
+    override fun areItemsTheSame(oldItem: SuggestedQuery, newItem: SuggestedQuery): Boolean {
         return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean {
-        return oldItem.title == newItem.title &&
-                oldItem.title == newItem.title
+    override fun areContentsTheSame(oldItem: SuggestedQuery, newItem: SuggestedQuery): Boolean {
+        return oldItem.q == newItem.q &&
+                oldItem.q == newItem.q
     }
 }
 
@@ -54,8 +54,8 @@ class SuggestViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val name: TextView = view.findViewById(R.id.item_title)
     val picture: ImageView = view.findViewById(R.id.item_picture)
 
-    fun bind(item: Result, color: Int) {
-        name.text = item.title
+    fun bind(item: SuggestedQuery, color: Int) {
+        name.text = item.q
         picture.setBackgroundColor(color)
     }
 

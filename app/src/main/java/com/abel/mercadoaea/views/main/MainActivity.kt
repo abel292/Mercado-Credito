@@ -2,44 +2,62 @@ package com.abel.mercadoaea.views.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.widget.SearchView
 import com.abel.mercadoaea.R
+import com.abel.mercadoaea.data.model.suggest.ResponseSuggest
+import com.abel.mercadoaea.util.Data
+import com.abel.mercadoaea.util.Status
+import com.abel.mercadoaea.util.toast
 import com.abel.mercadoaea.viewmodel.MercadoViewModel
-import com.abel.mercadoaea.viewmodel.ResourceResponse.Companion.ERROR
-import com.abel.mercadoaea.viewmodel.ResourceResponse.Companion.SUCCESS
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.toolbar.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
+
     private val viewModel by viewModel<MercadoViewModel>()
+    private val adapterSuggest: SuggestAdapter by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        initObservables()
+        viewModel.mainState.observe(::getLifecycle, ::updateUISearch)
+        configViews()
+    }
 
-        button.setOnClickListener {
-            val txt = editTextTextPersonName.text?.toString() ?: ""
-            //viewModel.getSuggest(txt)
-            viewModel.searchItems(txt, 0)
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        this.toast("buscando: $query")
+        return false
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        newText?.let {
+            if (it.length > 1) viewModel.getSuggest(it) else adapterSuggest.submitList(listOf())
+        }
+        return false
+    }
+
+    private fun updateUISearch(suggest: Data<ResponseSuggest>) {
+        when (suggest.responseType) {
+            Status.ERROR -> {
+            }
+            Status.LOADING -> {
+            }
+            Status.SUCCESSFUL -> {
+                suggest.data?.suggested_queries?.let { adapterSuggest.submitList(it) }
+            }
         }
     }
 
-    private fun initObservables() {
-        viewModel.resourceSearchLive.observe(this, {
-            when (it.responseAction) {
-                SUCCESS -> {
-                    it.resourceObject?.results?.forEach {
-                        Log.d("busqueda", it.title)
-                    }
+    private fun configViews() {
+        recyclerViewItems.adapter = adapterSuggest
+        configSearch()
+    }
 
-                }
-                ERROR -> {
-                    Log.e("busqueda", it.resourceObject.toString())
-                }
-            }
-        })
+    private fun configSearch() {
+        searchItems.setOnQueryTextListener(this)
     }
 }

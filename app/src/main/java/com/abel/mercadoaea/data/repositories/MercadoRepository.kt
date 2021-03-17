@@ -9,6 +9,7 @@ import com.abel.mercadoaea.data.model.item.ResponseItem
 import com.abel.mercadoaea.data.model.review.ResponseReview
 import com.abel.mercadoaea.data.model.search.ResponseSearch
 import com.abel.mercadoaea.data.model.suggest.ResponseSuggest
+import com.abel.mercadoaea.util.ResultResource
 import com.abel.mercadoaea.viewmodel.ResourceResponse
 import com.abel.mercadoaea.viewmodel.ResourceResponse.Companion.ERROR
 import com.abel.mercadoaea.viewmodel.ResourceResponse.Companion.SUCCESS
@@ -25,20 +26,11 @@ class MercadoRepository(private val mercadoApi: MercadoApi) {
     suspend fun getSuggestApi(q: String) = flow {
         val result = mercadoApi.getSuggest(false, LIMIT_SUGGEST, V_API, q)
         when (result.code()) {
-            200 -> {
-                resourceSuggest.resourceObject = result.body()
-                resourceSuggest.responseAction = SUCCESS
-            }
-            else -> {
-                resourceSuggest.responseAction = ERROR
-            }
+            200 ->emit( ResultResource.Success(result.body()!!))
+            else -> emit(ResultResource.Failure())
         }
-        resourceSuggest.loading = false
-        emit(resourceSuggest)
-
     }.catch {
-        resourceSuggest.responseAction = ERROR
-        emit(resourceSuggest)
+        emit(ResultResource.Failure())
     }
 
     suspend fun getListSearchedItems(q: String, offset: Int) = flow {

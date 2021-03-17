@@ -4,6 +4,7 @@ import com.abel.mercadoaea.BuildConfig
 import com.abel.mercadoaea.data.api.MercadoApi
 import com.abel.mercadoaea.data.repositories.MercadoRepository
 import com.abel.mercadoaea.viewmodel.MercadoViewModel
+import com.abel.mercadoaea.views.main.SuggestAdapter
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.koin.dsl.module
@@ -16,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 val moduleApp = module {
     single { MercadoRepository(get()) }
     single { provideMercadoApi() }
+    single { SuggestAdapter() }
 }
 
 fun provideMercadoApi(): MercadoApi = Retrofit.Builder()
