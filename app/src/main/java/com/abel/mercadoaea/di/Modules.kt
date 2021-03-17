@@ -1,12 +1,34 @@
 package com.abel.mercadoaea.di
 
-import com.abel.mercadoaea.views.main.MainActivity
+import com.abel.mercadoaea.BuildConfig
+import com.abel.mercadoaea.data.api.MercadoApi
+import com.abel.mercadoaea.data.repositories.MercadoRepository
+import com.abel.mercadoaea.viewmodel.MercadoViewModel
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import org.koin.dsl.module
+import org.koin.androidx.viewmodel.dsl.viewModel
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 val moduleApp = module {
-    single { MainActivity() }
+    single { MercadoRepository(get()) }
+    single { provideMercadoApi() }
 }
+
+fun provideMercadoApi(): MercadoApi = Retrofit.Builder()
+    .baseUrl(BuildConfig.BASE_URL)
+    .addConverterFactory(GsonConverterFactory.create(getGson()))
+    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+    .build()
+    .create(MercadoApi::class.java)
+
+fun getGson(): Gson = GsonBuilder()
+    .setLenient()
+    .create()
+
 val moduleViewModels = module {
-    //viewModel { SessionViewModel() }
+    viewModel { MercadoViewModel(get()) }
 }
