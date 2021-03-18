@@ -1,4 +1,4 @@
-package com.abel.mercadoaea.views.main
+package com.abel.mercadoaea.views.suggest
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -11,15 +11,18 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.abel.mercadoaea.R
 import com.abel.mercadoaea.data.model.suggest.SuggestedQuery
+import com.abel.mercadoaea.util.listeners.OnClickItemRecyclerListener
 
 //TODO ADAPTER
 class SuggestAdapter(callback: SuggestCallback = SuggestCallback()) :
     ListAdapter<SuggestedQuery, SuggestViewHolder>(callback) {
+    private lateinit var onClickItemRecyclerListener: OnClickItemRecyclerListener<SuggestedQuery>
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(SuggestViewHolder.layoutResId, parent, false)
-        return SuggestViewHolder(view)
+        return SuggestViewHolder(view, onClickItemRecyclerListener = onClickItemRecyclerListener)
     }
 
     override fun onBindViewHolder(holder: SuggestViewHolder, position: Int) {
@@ -27,6 +30,10 @@ class SuggestAdapter(callback: SuggestCallback = SuggestCallback()) :
         val hash = item.hashCode()
         val color = Color.rgb(Color.red(hash), Color.green(hash), Color.blue(hash))
         holder.bind(item, color)
+    }
+
+    fun setItemOnClick(onClickItemRecyclerListener: OnClickItemRecyclerListener<SuggestedQuery>) {
+        this.onClickItemRecyclerListener = onClickItemRecyclerListener
     }
 }
 
@@ -45,18 +52,23 @@ class SuggestCallback :
 }
 
 //TODO VIEW HOLDER
-class SuggestViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
-    companion object {
-        const val layoutResId = R.layout.item_suggest
-    }
+class SuggestViewHolder(
+    view: View,
+    val onClickItemRecyclerListener: OnClickItemRecyclerListener<SuggestedQuery>
+) : RecyclerView.ViewHolder(view) {
 
     val name: TextView = view.findViewById(R.id.item_title)
     val picture: ImageView = view.findViewById(R.id.item_picture)
-
     fun bind(item: SuggestedQuery, color: Int) {
         name.text = item.q
         picture.setBackgroundColor(color)
+        itemView.setOnClickListener {
+            onClickItemRecyclerListener.onClick(item)
+        }
+    }
+
+    companion object {
+        const val layoutResId = R.layout.item_suggest
     }
 
 }

@@ -1,5 +1,6 @@
 package com.abel.mercadoaea.data.repositories
 
+import android.util.Log
 import com.abel.mercadoaea.data.api.ContsApi.Companion.LIMIT_SEARCH
 import com.abel.mercadoaea.data.api.ContsApi.Companion.V_API
 import com.abel.mercadoaea.data.api.ContsApi.Companion.LIMIT_SUGGEST
@@ -8,25 +9,18 @@ import com.abel.mercadoaea.data.model.description.ResponseDescription
 import com.abel.mercadoaea.data.model.item.ResponseItem
 import com.abel.mercadoaea.data.model.review.ResponseReview
 import com.abel.mercadoaea.data.model.search.ResponseSearch
-import com.abel.mercadoaea.data.model.suggest.ResponseSuggest
+import com.abel.mercadoaea.util.Data
 import com.abel.mercadoaea.util.ResultResource
-import com.abel.mercadoaea.viewmodel.ResourceResponse
-import com.abel.mercadoaea.viewmodel.ResourceResponse.Companion.ERROR
-import com.abel.mercadoaea.viewmodel.ResourceResponse.Companion.SUCCESS
+import com.abel.mercadoaea.util.Status
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
 class MercadoRepository(private val mercadoApi: MercadoApi) {
-    private val resourceSuggest = ResourceResponse<ResponseSuggest>(null, null)
-    private val resourceSearch = ResourceResponse<ResponseSearch>(null, null)
-    private val resourceDescription = ResourceResponse<ResponseDescription>(null, null)
-    private val resourceReview = ResourceResponse<ResponseReview>(null, null)
-    private val resourceItem = ResourceResponse<ResponseItem>(null, null)
 
     suspend fun getSuggestApi(q: String) = flow {
         val result = mercadoApi.getSuggest(false, LIMIT_SUGGEST, V_API, q)
         when (result.code()) {
-            200 ->emit( ResultResource.Success(result.body()!!))
+            200 -> emit(ResultResource.Success(result.body()!!))
             else -> emit(ResultResource.Failure())
         }
     }.catch {
@@ -36,73 +30,40 @@ class MercadoRepository(private val mercadoApi: MercadoApi) {
     suspend fun getListSearchedItems(q: String, offset: Int) = flow {
         val result = mercadoApi.getListSearchedItems(LIMIT_SEARCH, offset, q, "results")
         when (result.code()) {
-            200 -> {
-                resourceSearch.resourceObject = result.body()
-                resourceSearch.responseAction = SUCCESS
-            }
-            else -> {
-                resourceSearch.responseAction = ERROR
-            }
+            200 -> emit(ResultResource.Success(result.body()!!))
+            else -> emit(ResultResource.Failure())
         }
-        resourceSearch.loading = false
-        emit(resourceSearch)
-
+    }.catch {
+        emit(ResultResource.Failure())
     }
 
     suspend fun getDescriptionApi(idItem: String) = flow {
         val result = mercadoApi.getDescription(idItem)
         when (result.code()) {
-            200 -> {
-                resourceDescription.resourceObject = result.body()
-                resourceDescription.responseAction = SUCCESS
-            }
-            else -> {
-                resourceDescription.responseAction = ERROR
-            }
+            200 -> emit(ResultResource.Success(result.body()!!))
+            else -> emit(ResultResource.Failure())
         }
-        resourceDescription.loading = false
-        emit(resourceDescription)
-
     }.catch {
-        resourceDescription.responseAction = ERROR
-        emit(resourceDescription)
+        emit(ResultResource.Failure())
     }
 
     suspend fun getReviews(idItem: String) = flow {
         val result = mercadoApi.getReviews(idItem)
         when (result.code()) {
-            200 -> {
-                resourceReview.resourceObject = result.body()
-                resourceReview.responseAction = SUCCESS
-            }
-            else -> {
-                resourceReview.responseAction = ERROR
-            }
+            200 -> emit(ResultResource.Success(result.body()!!))
+            else -> emit(ResultResource.Failure())
         }
-        resourceReview.loading = false
-        emit(resourceReview)
-
     }.catch {
-        resourceReview.responseAction = ERROR
-        emit(resourceReview)
+        emit(ResultResource.Failure())
     }
 
     suspend fun getItemComplete(idItem: String) = flow {
         val result = mercadoApi.getItemComplete(idItem)
         when (result.code()) {
-            200 -> {
-                resourceItem.resourceObject = result.body()
-                resourceItem.responseAction = SUCCESS
-            }
-            else -> {
-                resourceItem.responseAction = ERROR
-            }
+            200 -> emit(ResultResource.Success(result.body()!!))
+            else -> emit(ResultResource.Failure())
         }
-        resourceItem.loading = false
-        emit(resourceItem)
-
     }.catch {
-        resourceItem.responseAction = ERROR
-        emit(resourceItem)
+        emit(ResultResource.Failure())
     }
 }

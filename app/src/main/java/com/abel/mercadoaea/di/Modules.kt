@@ -3,8 +3,9 @@ package com.abel.mercadoaea.di
 import com.abel.mercadoaea.BuildConfig
 import com.abel.mercadoaea.data.api.MercadoApi
 import com.abel.mercadoaea.data.repositories.MercadoRepository
-import com.abel.mercadoaea.viewmodel.MercadoViewModel
-import com.abel.mercadoaea.views.main.SuggestAdapter
+import com.abel.mercadoaea.viewmodel.MainViewModel
+import com.abel.mercadoaea.views.resultList.SearchedAdapter
+import com.abel.mercadoaea.views.suggest.SuggestAdapter
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.koin.dsl.module
@@ -18,6 +19,7 @@ val moduleApp = module {
     single { MercadoRepository(get()) }
     single { provideMercadoApi() }
     single { SuggestAdapter() }
+    single { SearchedAdapter() }
 }
 
 fun provideMercadoApi(): MercadoApi = Retrofit.Builder()
@@ -32,5 +34,5 @@ fun getGson(): Gson = GsonBuilder()
     .create()
 
 val moduleViewModels = module {
-    viewModel { MercadoViewModel(get()) }
+    viewModel { MainViewModel(get()) }
 }

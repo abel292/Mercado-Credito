@@ -6,4 +6,4 @@ data class Data<RequestData>(
     var error: Exception? = null
 )
 
-enum class Status { SUCCESSFUL, ERROR, EMPTY, LOADING }
+enum class Status { SUCCESSFUL, ERROR, EMPTY }
