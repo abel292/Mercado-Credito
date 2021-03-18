@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.abel.mercadoaea.R
 import com.abel.mercadoaea.data.model.search.ResponseSearch
 import com.abel.mercadoaea.data.model.search.Result
@@ -24,18 +26,8 @@ class ResultListFragment : Fragment(), OnLoadMoreListener {
     private val viewModel by sharedViewModel<MainViewModel>()
     private val adapterSearched: SearchedAdapter by inject()
     private lateinit var query: String
-    private val Fragment.navController
-        get() = Navigation.findNavController(
-            requireActivity(),
-            R.id.nav_host_fragment
-        )
-
-
     private val itemListener = OnClickItemRecyclerListener<Result> { result ->
-        Log.e(
-            "ACTION",
-            "ME RE FUI AL OTRO ACTIVITY"
-        )
+        goToViewerItem(result.id)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,10 +51,6 @@ class ResultListFragment : Fragment(), OnLoadMoreListener {
         viewModel.searchItems(query)
     }
 
-    override fun onLoadMore(offset: Int) {
-        viewModel.searchItems(query, offset = offset)
-    }
-
     private fun updateUISearch(results: Data<ResponseSearch>) {
         when (results.responseType) {
             Status.ERROR -> {
@@ -77,14 +65,24 @@ class ResultListFragment : Fragment(), OnLoadMoreListener {
         }
     }
 
+    override fun onLoadMore(offset: Int) {
+        adapterSearched.modeLoading()
+        viewModel.searchItems(query, offset = offset)
+    }
+
     private fun configViews() {
-        context?.toast("estoy en resultList")
         recyclerViewSearched.adapter = adapterSearched
         configAdapter()
     }
 
     private fun configAdapter() {
         adapterSearched.setOnLoadMoreListener(this, itemListener)
+    }
+
+    private fun goToViewerItem(idProduct: String) {
+        val direction: NavDirections =
+            ResultListFragmentDirections.actionResultListFragmentToViewerItemActivity(idProduct)
+        findNavController().navigate(direction)
     }
 
 }

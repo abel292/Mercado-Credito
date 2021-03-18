@@ -4,6 +4,8 @@ import com.abel.mercadoaea.BuildConfig
 import com.abel.mercadoaea.data.api.MercadoApi
 import com.abel.mercadoaea.data.repositories.MercadoRepository
 import com.abel.mercadoaea.viewmodel.MainViewModel
+import com.abel.mercadoaea.viewmodel.ViewerViewModel
+import com.abel.mercadoaea.views.adapter.GalleryAdapter
 import com.abel.mercadoaea.views.resultList.SearchedAdapter
 import com.abel.mercadoaea.views.suggest.SuggestAdapter
 import com.google.gson.Gson
@@ -20,6 +22,7 @@ val moduleApp = module {
     single { provideMercadoApi() }
     single { SuggestAdapter() }
     single { SearchedAdapter() }
+    single { GalleryAdapter() }
 }
 
 fun provideMercadoApi(): MercadoApi = Retrofit.Builder()
@@ -35,4 +38,5 @@ fun getGson(): Gson = GsonBuilder()
 
 val moduleViewModels = module {
     viewModel { MainViewModel(get()) }
+    viewModel { ViewerViewModel(get()) }
 }

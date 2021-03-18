@@ -1,6 +1,5 @@
 package com.abel.mercadoaea.views.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,24 +16,8 @@ class GalleryAdapter :
     private var mSliderItems: MutableList<Picture> = ArrayList()
     private lateinit var onClickListenerPhoto: OnClickItemRecyclerListener<Picture>
 
-    fun renewItems(sliderItems: MutableList<Picture>) {
-        mSliderItems = sliderItems
-        notifyDataSetChanged()
-    }
-
-    fun deleteItem(position: Int) {
-        mSliderItems.removeAt(position)
-        notifyDataSetChanged()
-    }
-
     fun setListener(onClickListenerPhoto: OnClickItemRecyclerListener<Picture>) {
         this.onClickListenerPhoto = onClickListenerPhoto
-    }
-
-    fun getItems(): ArrayList<Picture> {
-        val photos = ArrayList<Picture>()
-        photos.addAll(mSliderItems)
-        return photos
     }
 
     fun addItems(sliderItem: List<Picture>) {
@@ -51,9 +34,12 @@ class GalleryAdapter :
     override fun onBindViewHolder(viewHolder: SliderAdapterVH, position: Int) {
         val sliderItem = mSliderItems[position]
 
-        Glide.with(viewHolder.itemView.context)
-            .load(sliderItem)
-            .fitCenter()
+        Glide.with(viewHolder.imageViewBackground.context)
+            .load(sliderItem.url)
+            .placeholder(R.drawable.ic_launcher_background)
+            .error(R.drawable.ic_launcher_background)
+            .override(500, 500)
+            .centerCrop()
             .into(viewHolder.imageViewBackground)
 
         viewHolder.imageViewBackground.setOnClickListener {
@@ -62,7 +48,6 @@ class GalleryAdapter :
     }
 
     override fun getCount(): Int {
-        //slider view count could be dynamic size
         return mSliderItems.size
     }
 

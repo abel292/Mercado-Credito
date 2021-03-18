@@ -29,6 +29,7 @@ class MercadoRepository(private val mercadoApi: MercadoApi) {
 
     suspend fun getListSearchedItems(q: String, offset: Int) = flow {
         val result = mercadoApi.getListSearchedItems(LIMIT_SEARCH, offset, q, "results")
+        kotlinx.coroutines.delay(2000)
         when (result.code()) {
             200 -> emit(ResultResource.Success(result.body()!!))
             else -> emit(ResultResource.Failure())

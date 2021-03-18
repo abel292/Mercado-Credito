@@ -29,6 +29,7 @@ abstract class BaseAdapterLoadMore<Object> : RecyclerView.Adapter<RecyclerView.V
     }
 
     fun addMoreItems(items: List<Object>) {
+        stopModeLoading()
         items.forEach {
             list.add(it)
             notifyItemInserted(list.size)
@@ -40,7 +41,7 @@ abstract class BaseAdapterLoadMore<Object> : RecyclerView.Adapter<RecyclerView.V
         notifyItemInserted(list.size - 1)
     }
 
-    fun stopModeLoading() {
+    private fun stopModeLoading() {
         if (list.isNotEmpty()) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 list.removeIf { item -> item == null }
@@ -52,7 +53,7 @@ abstract class BaseAdapterLoadMore<Object> : RecyclerView.Adapter<RecyclerView.V
         loading = false
     }
 
-    fun configOnScrollListener() {
+    private fun configOnScrollListener() {
         if (recyclerView.layoutManager is LinearLayoutManager) {
             val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {

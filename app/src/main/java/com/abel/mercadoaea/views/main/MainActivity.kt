@@ -3,11 +3,8 @@ package com.abel.mercadoaea.views.main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.navigation.*
-import androidx.navigation.fragment.findNavController
 import com.abel.mercadoaea.R
-import com.abel.mercadoaea.data.model.suggest.SuggestedQuery
 import com.abel.mercadoaea.util.*
 import com.abel.mercadoaea.viewmodel.MainViewModel
 import com.abel.mercadoaea.views.suggest.SuggestFragmentDirections
@@ -18,19 +15,25 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private val viewModel by viewModel<MainViewModel>()
-    lateinit var navController: NavController
-    private val Fragment.navController
-        get() = Navigation.findNavController(
-            requireActivity(),
-            R.id.nav_host_fragment
-        )
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        navController = findNavController(R.id.nav_host_fragment)
 
+        navController = findNavController(R.id.nav_host_fragment)
+        viewModel.mainState.observe(::getLifecycle, ::updateUI)
         configSearch()
+    }
+
+    private fun updateUI(results: MainData) {
+        when (results.responseType) {
+            StatusMain.SHOW_RESULTS -> {
+                searchItems.onActionViewCollapsed()
+            }
+            StatusMain.LOADING -> {
+            }
+        }
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -46,6 +49,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private fun configSearch() {
         searchItems.setOnQueryTextListener(this)
+        searchItems.onActionViewCollapsed()
         searchItems.setOnSearchClickListener {
             goToSearch()
         }

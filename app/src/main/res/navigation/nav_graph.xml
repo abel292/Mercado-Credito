@@ -29,6 +29,9 @@
         <argument
             android:name="argQuery"
             app:argType="string" />
+        <action
+            android:id="@+id/action_resultListFragment_to_viewerItemActivity"
+            app:destination="@id/viewerItemActivity" />
     </fragment>
 
     <fragment
@@ -44,5 +47,12 @@
             app:popUpTo="@id/homeFragment"
             />
     </fragment>
+    <activity
+        android:id="@+id/viewerItemActivity"
+        android:name="com.abel.mercadoaea.views.viewerItem.ViewerItemActivity"
+        android:label="activity_viewer_item"
+        tools:layout="@layout/activity_viewer_item" >
+        <argument android:name="argIdProduct" />
+    </activity>
 
 </navigation>
