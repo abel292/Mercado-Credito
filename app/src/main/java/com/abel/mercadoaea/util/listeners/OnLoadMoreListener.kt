@@ -1,4 +1,4 @@
-package com.abel.mercadoaea.util
+package com.abel.mercadoaea.util.listeners
 
 interface OnLoadMoreListener {
     fun onLoadMore(offset: Int)
