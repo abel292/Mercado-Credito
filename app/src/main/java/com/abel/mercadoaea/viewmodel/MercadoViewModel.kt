@@ -34,15 +34,20 @@ class MercadoViewModel(private val mercadoRepository: MercadoRepository) : BaseV
 
     fun getSuggest(q: String) = launch {
         mutableMainState.value = Data(responseType = Status.LOADING)
-        mercadoRepository.getSuggestApi(q).collect {
-            when (it) {
-                is ResultResource.Failure -> {
-                    mutableMainState.value =
-                        Data(responseType = Status.ERROR, error = it.exception)
-                }
-                is ResultResource.Success -> {
-                    mutableMainState.value =
-                        Data(responseType = Status.SUCCESSFUL, data = it.data)
+        if (q.length < 2) {
+            mutableMainState.value =
+                Data(responseType = Status.EMPTY, data = null)
+        } else {
+            mercadoRepository.getSuggestApi(q).collect {
+                when (it) {
+                    is ResultResource.Failure -> {
+                        mutableMainState.value =
+                            Data(responseType = Status.ERROR, error = it.exception)
+                    }
+                    is ResultResource.Success -> {
+                        mutableMainState.value =
+                            Data(responseType = Status.SUCCESSFUL, data = it.data)
+                    }
                 }
             }
         }

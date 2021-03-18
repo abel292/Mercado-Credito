@@ -48,7 +48,7 @@ class SuggestCallback :
 class SuggestViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     companion object {
-        const val layoutResId = R.layout.item_elf
+        const val layoutResId = R.layout.item_suggest
     }
 
     val name: TextView = view.findViewById(R.id.item_title)
