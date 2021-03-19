@@ -29,6 +29,14 @@ interface MercadoApi {
         @Query("attributes") attributes: String
     ): Response<ResponseSearch>
 
+    @GET("/sites/MLA/search")
+    suspend fun getLisSearchCategory(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+        @Query("category") category: String,
+        @Query("attributes") attributes: String
+    ): Response<ResponseSearch>
+
     @GET("/sites/MLA/categories")
     suspend fun getCategory(): Response<ResponseCategory>
 

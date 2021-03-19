@@ -8,4 +8,5 @@
     <string name="descripci_n">Descripción:</string>
     <string name="categor_as">Categorías</string>
     <string name="ultimos_productos_vistos">Ultimos productos vistos</string>
+    <string name="error_sin_filtro">No se aplico ningun filtro</string>
 </resources>

@@ -3,6 +3,7 @@ package com.abel.mercadoaea.views.main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityManagerCompat
 import androidx.navigation.*
 import com.abel.mercadoaea.R
 import com.abel.mercadoaea.util.*

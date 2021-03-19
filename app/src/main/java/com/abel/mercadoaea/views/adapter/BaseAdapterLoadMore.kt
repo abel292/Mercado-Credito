@@ -18,6 +18,10 @@ abstract class BaseAdapterLoadMore<Object> : RecyclerView.Adapter<RecyclerView.V
     val viewItem = 1
     val viewLoad = 0
 
+    fun isNotInit(action: () -> Unit) {
+        clearList()
+    }
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         setRecycler(recyclerView)
@@ -34,6 +38,11 @@ abstract class BaseAdapterLoadMore<Object> : RecyclerView.Adapter<RecyclerView.V
             list.add(it)
             notifyItemInserted(list.size)
         }
+    }
+
+    fun clearList() {
+        list.clear()
+        notifyDataSetChanged()
     }
 
     fun modeLoading() {

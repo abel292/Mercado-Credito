@@ -1,6 +1,8 @@
 package com.abel.mercadoaea.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import com.abel.mercadoaea.data.api.ContsApi.Companion.MODO_CATEGORY
+import com.abel.mercadoaea.data.api.ContsApi.Companion.MODO_QUERY
 import com.abel.mercadoaea.data.model.category.ResponseCategory
 import com.abel.mercadoaea.data.model.search.ResponseSearch
 import com.abel.mercadoaea.data.model.suggest.ResponseSuggest
@@ -65,18 +67,47 @@ class MainViewModel(private val mercadoRepository: MercadoRepository) : BaseView
 
     fun searchItems(query: String, offset: Int = 0) = launch {
         hideSearchToolbar()
-        mercadoRepository.getListSearchedItems(query, offset).collect {
-            when (it) {
-                is ResultResource.Failure -> {
-                    liveDataSearch.value =
-                        Data(responseType = Status.ERROR, error = it.exception)
-                }
-                is ResultResource.Success -> {
-                    liveDataSearch.value =
-                        Data(responseType = Status.SUCCESSFUL, data = it.data)
+        when {
+            query.contains(MODO_QUERY) -> {
+                val q = query.replace(MODO_QUERY, "")
+                mercadoRepository.getListSearchedItems(q, offset).collect {
+                    when (it) {
+                        is ResultResource.Failure -> {
+                            liveDataSearch.value =
+                                Data(responseType = Status.ERROR, error = it.exception)
+                        }
+                        is ResultResource.Success -> {
+                            liveDataSearch.value =
+                                Data(responseType = Status.SUCCESSFUL, data = it.data)
+                        }
+                    }
                 }
             }
+            query.contains(MODO_CATEGORY) -> {
+                val q = query.replace(MODO_CATEGORY, "")
+                mercadoRepository.getListSearchedCategory(q, offset).collect {
+                    when (it) {
+                        is ResultResource.Failure -> {
+                            liveDataSearch.value =
+                                Data(responseType = Status.ERROR, error = it.exception)
+                        }
+                        is ResultResource.Success -> {
+                            liveDataSearch.value =
+                                Data(responseType = Status.SUCCESSFUL, data = it.data)
+                        }
+                    }
+                }
+            }
+            else -> {
+                liveDataSearch.value =
+                    Data(
+                        responseType = Status.ERROR,
+                        error = Exception("No se aplico ningun filtro")
+                    )
+            }
         }
+
+
     }
     //endregion
 }

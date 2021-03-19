@@ -1,7 +1,5 @@
-package com.abel.mercadoaea.di
+package com.abel.mercadoaea.injection
 
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import com.abel.mercadoaea.BuildConfig
 import com.abel.mercadoaea.data.api.MercadoApi
 import com.abel.mercadoaea.data.repositories.MercadoRepository

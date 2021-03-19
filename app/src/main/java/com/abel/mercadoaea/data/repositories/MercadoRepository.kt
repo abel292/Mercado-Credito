@@ -38,6 +38,17 @@ class MercadoRepository(private val mercadoApi: MercadoApi) {
         emit(ResultResource.Failure())
     }
 
+    suspend fun getListSearchedCategory(categoryId: String, offset: Int) = flow {
+        val result = mercadoApi.getLisSearchCategory(LIMIT_SEARCH, offset, categoryId, "results")
+        kotlinx.coroutines.delay(2000)
+        when (result.code()) {
+            200 -> emit(ResultResource.Success(result.body()!!))
+            else -> emit(ResultResource.Failure())
+        }
+    }.catch {
+        emit(ResultResource.Failure())
+    }
+
     suspend fun getDescriptionApi(idItem: String) = flow {
         val result = mercadoApi.getDescription(idItem)
         when (result.code()) {

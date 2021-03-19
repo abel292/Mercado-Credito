@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.abel.mercadoaea.R
 import com.abel.mercadoaea.data.model.search.ResponseSearch
 import com.abel.mercadoaea.data.model.search.Result
@@ -16,22 +17,15 @@ import com.abel.mercadoaea.util.listeners.OnLoadMoreListener
 import com.abel.mercadoaea.util.Status
 import com.abel.mercadoaea.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_result_list.*
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ResultListFragment : Fragment(), OnLoadMoreListener {
 
     private val viewModel by sharedViewModel<MainViewModel>()
-    private val adapterSearched: SearchedAdapter by inject()
+    private lateinit var adapterSearched: SearchedAdapter
     private lateinit var query: String
     private val itemListener =
         OnClickItemRecyclerListener<Result> { result -> goToViewerItem(result.id) }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val args = requireArguments()
-        query = ResultListFragmentArgs.fromBundle(args).argQuery
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,14 +34,14 @@ class ResultListFragment : Fragment(), OnLoadMoreListener {
         return inflater.inflate(R.layout.fragment_result_list, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onResume() {
+        super.onResume()
         configViews()
+        val args = requireArguments()
+        query = ResultListFragmentArgs.fromBundle(args).argQuery
         viewModel.liveDataSearch.observe(::getLifecycle, ::updateUISearch)
         viewModel.searchItems(query)
     }
-
     private fun updateUISearch(results: Data<ResponseSearch>) {
         when (results.responseType) {
             Status.ERROR -> {
@@ -68,11 +62,8 @@ class ResultListFragment : Fragment(), OnLoadMoreListener {
     }
 
     private fun configViews() {
+        adapterSearched = SearchedAdapter()
         recyclerViewSearched.adapter = adapterSearched
-        configAdapter()
-    }
-
-    private fun configAdapter() {
         adapterSearched.setListener(this, itemListener)
     }
 

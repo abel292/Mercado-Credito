@@ -43,7 +43,6 @@
             android:id="@+id/action_searchFragment_to_resultListFragment"
             app:destination="@id/resultListFragment"
             app:popUpToInclusive="false"
-            app:launchSingleTop="true"
             app:popUpTo="@id/homeFragment"
             />
     </fragment>

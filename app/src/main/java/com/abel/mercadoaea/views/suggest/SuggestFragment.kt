@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.abel.mercadoaea.R
+import com.abel.mercadoaea.data.api.ContsApi.Companion.MODO_QUERY
 import com.abel.mercadoaea.data.model.suggest.ResponseSuggest
 import com.abel.mercadoaea.data.model.suggest.SuggestedQuery
 import com.abel.mercadoaea.util.Data
 import com.abel.mercadoaea.util.listeners.OnClickItemRecyclerListener
 import com.abel.mercadoaea.util.Status
-import com.abel.mercadoaea.util.toast
 import com.abel.mercadoaea.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_suggest.*
 import org.koin.android.ext.android.inject
@@ -53,8 +53,6 @@ class SuggestFragment : Fragment() {
     }
 
     private fun configViews() {
-        context?.toast("estoy en suggest")
-
         recyclerViewSuggest.adapter = adapterSuggest
         adapterSuggest.setItemOnClick(OnClickItemRecyclerListener {
             goToSearched(it)
@@ -63,7 +61,7 @@ class SuggestFragment : Fragment() {
 
     private fun goToSearched(suggest: SuggestedQuery) {
         val direction: NavDirections =
-            SuggestFragmentDirections.actionSearchFragmentToResultListFragment(suggest.q)
+            SuggestFragmentDirections.actionSearchFragmentToResultListFragment("${suggest.q}$MODO_QUERY")
         findNavController().navigate(direction)
     }
 }
