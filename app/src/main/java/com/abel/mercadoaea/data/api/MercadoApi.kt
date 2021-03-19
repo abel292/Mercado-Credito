@@ -1,5 +1,6 @@
 package com.abel.mercadoaea.data.api
 
+import com.abel.mercadoaea.data.model.category.ResponseCategory
 import com.abel.mercadoaea.data.model.description.ResponseDescription
 import com.abel.mercadoaea.data.model.item.ResponseItem
 import com.abel.mercadoaea.data.model.review.ResponseReview
@@ -27,6 +28,9 @@ interface MercadoApi {
         @Query("q") q: String,
         @Query("attributes") attributes: String
     ): Response<ResponseSearch>
+
+    @GET("/sites/MLA/categories")
+    suspend fun getCategory(): Response<ResponseCategory>
 
     @GET("/items/{idItem}/description?api_version=2")
     suspend fun getDescription(@Path(value = "idItem") idItem: String): Response<ResponseDescription>

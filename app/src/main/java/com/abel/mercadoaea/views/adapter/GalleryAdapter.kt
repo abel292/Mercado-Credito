@@ -1,20 +1,27 @@
 package com.abel.mercadoaea.views.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.abel.mercadoaea.R
 import com.abel.mercadoaea.data.model.item.Picture
+import com.abel.mercadoaea.util.isValidGlideContext
 import com.abel.mercadoaea.util.listeners.OnClickItemRecyclerListener
 import com.bumptech.glide.Glide
 import com.smarteist.autoimageslider.SliderViewAdapter
 
 
-class GalleryAdapter :
+class GalleryAdapter() :
     SliderViewAdapter<GalleryAdapter.SliderAdapterVH>() {
     private var mSliderItems: MutableList<Picture> = ArrayList()
     private lateinit var onClickListenerPhoto: OnClickItemRecyclerListener<Picture>
+    private lateinit var context: Context
+
+    fun setContext(context: Context) {
+        this.context = context
+    }
 
     fun setListener(onClickListenerPhoto: OnClickItemRecyclerListener<Picture>) {
         this.onClickListenerPhoto = onClickListenerPhoto
@@ -33,14 +40,15 @@ class GalleryAdapter :
 
     override fun onBindViewHolder(viewHolder: SliderAdapterVH, position: Int) {
         val sliderItem = mSliderItems[position]
-
-        Glide.with(viewHolder.imageViewBackground.context)
-            .load(sliderItem.url)
-            .placeholder(R.drawable.ic_launcher_background)
-            .error(R.drawable.ic_launcher_background)
-            .override(500, 500)
-            .centerCrop()
-            .into(viewHolder.imageViewBackground)
+        if (context.isValidGlideContext()) {
+            Glide.with(context)
+                .load(sliderItem.url)
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_background)
+                .override(500, 500)
+                .centerCrop()
+                .into(viewHolder.imageViewBackground)
+        }
 
         viewHolder.imageViewBackground.setOnClickListener {
             onClickListenerPhoto.onClick(sliderItem)

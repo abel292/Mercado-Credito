@@ -22,7 +22,6 @@ class ViewerItemActivity : AppCompatActivity() {
     private val viewModel by viewModel<ViewerViewModel>()
     private val galleryAdapter: GalleryAdapter by inject()
     private val itemPictureListener = OnClickItemRecyclerListener<Picture> { picture ->
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,10 +29,14 @@ class ViewerItemActivity : AppCompatActivity() {
         setContentView(R.layout.activity_viewer_item)
         val argIdProduct = ViewerItemActivityArgs.fromBundle(bundle = intent.extras!!).argIdProduct
 
-        galleryAdapter.setListener(itemPictureListener)
         viewModel.viewerState.observe(::getLifecycle, ::updateUI)
         viewModel.liveDataItem.observe(::getLifecycle, ::configUI)
         viewModel.getItemComplete(argIdProduct)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 
     private fun configUI(dataItem: Data<ResponseItem>?) {
@@ -52,6 +55,8 @@ class ViewerItemActivity : AppCompatActivity() {
     }
 
     private fun configGallery(pictures: List<Picture>) {
+        galleryAdapter.setContext(this)
+        galleryAdapter.setListener(itemPictureListener)
         galleryAdapter.addItems(pictures)
         galleryView.setSliderAdapter(galleryAdapter)
     }

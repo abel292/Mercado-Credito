@@ -1,11 +1,14 @@
 package com.abel.mercadoaea.di
 
+import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
 import com.abel.mercadoaea.BuildConfig
 import com.abel.mercadoaea.data.api.MercadoApi
 import com.abel.mercadoaea.data.repositories.MercadoRepository
 import com.abel.mercadoaea.viewmodel.MainViewModel
 import com.abel.mercadoaea.viewmodel.ViewerViewModel
 import com.abel.mercadoaea.views.adapter.GalleryAdapter
+import com.abel.mercadoaea.views.home.CategoryAdapter
 import com.abel.mercadoaea.views.resultList.SearchedAdapter
 import com.abel.mercadoaea.views.suggest.SuggestAdapter
 import com.google.gson.Gson
@@ -21,8 +24,9 @@ val moduleApp = module {
     single { MercadoRepository(get()) }
     single { provideMercadoApi() }
     single { SuggestAdapter() }
-    single { SearchedAdapter() }
-    single { GalleryAdapter() }
+    single { CategoryAdapter() }
+    factory { SearchedAdapter() }
+    factory { GalleryAdapter() }
 }
 
 fun provideMercadoApi(): MercadoApi = Retrofit.Builder()

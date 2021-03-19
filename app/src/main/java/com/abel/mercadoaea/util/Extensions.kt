@@ -12,6 +12,8 @@ fun Context.toast(message :String){
     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 }
 
+fun Context.isValidGlideContext() = this !is Activity || (!this.isDestroyed && !this.isFinishing)
+
 const val SEARCHABLE_DESTINATION = "AppSearchData"
 @SuppressLint("RestrictedApi")
 fun SearchView.configureSearchableInfo() {

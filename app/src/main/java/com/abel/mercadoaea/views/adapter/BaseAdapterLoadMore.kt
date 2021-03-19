@@ -9,8 +9,8 @@ import com.abel.mercadoaea.util.listeners.OnLoadMoreListener
 
 abstract class BaseAdapterLoadMore<Object> : RecyclerView.Adapter<RecyclerView.ViewHolder?>() {
     var list: ArrayList<Object?> = ArrayList()
-    protected lateinit var onClickListener: OnClickItemRecyclerListener<Object>
-    private lateinit var onLoadMoreListener: OnLoadMoreListener
+    protected var onClickListener: OnClickItemRecyclerListener<Object>? = null
+    private var onLoadMoreListener: OnLoadMoreListener? = null
     private lateinit var recyclerView: RecyclerView
     private var lastVisibleItem = 0
     private var totalItemCount = 0
@@ -63,7 +63,7 @@ abstract class BaseAdapterLoadMore<Object> : RecyclerView.Adapter<RecyclerView.V
                     lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
 
                     if (!loading && totalItemCount <= lastVisibleItem + MORE) {
-                        onLoadMoreListener.onLoadMore(list.size)
+                        onLoadMoreListener?.onLoadMore(list.size)
                         loading = true
                     }
                 }
@@ -72,9 +72,9 @@ abstract class BaseAdapterLoadMore<Object> : RecyclerView.Adapter<RecyclerView.V
     }
 
     @JvmName("setOnLoadMoreListener1")
-    fun setOnLoadMoreListener(
-        onLoadMoreListener: OnLoadMoreListener,
-        onClickItemRecyclerListener: OnClickItemRecyclerListener<Object>
+    fun setListener(
+        onLoadMoreListener: OnLoadMoreListener?,
+        onClickItemRecyclerListener: OnClickItemRecyclerListener<Object>?
     ) {
         this.onLoadMoreListener = onLoadMoreListener
         this.onClickListener = onClickItemRecyclerListener

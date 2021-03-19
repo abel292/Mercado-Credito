@@ -48,6 +48,16 @@ class MercadoRepository(private val mercadoApi: MercadoApi) {
         emit(ResultResource.Failure())
     }
 
+    suspend fun getCategoryApi() = flow {
+        val result = mercadoApi.getCategory()
+        when (result.code()) {
+            200 -> emit(ResultResource.Success(result.body()!!))
+            else -> emit(ResultResource.Failure())
+        }
+    }.catch {
+        emit(ResultResource.Failure())
+    }
+
     suspend fun getReviews(idItem: String) = flow {
         val result = mercadoApi.getReviews(idItem)
         when (result.code()) {

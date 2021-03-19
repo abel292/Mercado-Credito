@@ -1,6 +1,7 @@
 package com.abel.mercadoaea.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import com.abel.mercadoaea.data.model.category.ResponseCategory
 import com.abel.mercadoaea.data.model.description.ResponseDescription
 import com.abel.mercadoaea.data.model.item.ResponseItem
 import com.abel.mercadoaea.data.model.review.ResponseReview
@@ -20,8 +21,8 @@ class ViewerViewModel(private val mercadoRepository: MercadoRepository) : BaseVi
 
     //endregion
 
-    fun getDescription() = launch {
-        mercadoRepository.getDescriptionApi("MLA723647590").collect {
+    fun getDescription(id: String) = launch {
+        mercadoRepository.getDescriptionApi(idItem = id).collect {
             when (it) {
                 is ResultResource.Failure -> {
                     liveDataDescription.value =

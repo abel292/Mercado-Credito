@@ -6,4 +6,6 @@
     <string name="detalles">Detalles</string>
     <string name="precio">Precio</string>
     <string name="descripci_n">Descripción:</string>
+    <string name="categor_as">Categorías</string>
+    <string name="ultimos_productos_vistos">Ultimos productos vistos</string>
 </resources>

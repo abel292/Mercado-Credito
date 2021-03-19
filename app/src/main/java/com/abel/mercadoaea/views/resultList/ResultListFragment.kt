@@ -1,13 +1,11 @@
 package com.abel.mercadoaea.views.resultList
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavDirections
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.abel.mercadoaea.R
 import com.abel.mercadoaea.data.model.search.ResponseSearch
@@ -16,19 +14,18 @@ import com.abel.mercadoaea.util.Data
 import com.abel.mercadoaea.util.listeners.OnClickItemRecyclerListener
 import com.abel.mercadoaea.util.listeners.OnLoadMoreListener
 import com.abel.mercadoaea.util.Status
-import com.abel.mercadoaea.util.toast
 import com.abel.mercadoaea.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_result_list.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ResultListFragment : Fragment(), OnLoadMoreListener {
+
     private val viewModel by sharedViewModel<MainViewModel>()
     private val adapterSearched: SearchedAdapter by inject()
     private lateinit var query: String
-    private val itemListener = OnClickItemRecyclerListener<Result> { result ->
-        goToViewerItem(result.id)
-    }
+    private val itemListener =
+        OnClickItemRecyclerListener<Result> { result -> goToViewerItem(result.id) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +73,7 @@ class ResultListFragment : Fragment(), OnLoadMoreListener {
     }
 
     private fun configAdapter() {
-        adapterSearched.setOnLoadMoreListener(this, itemListener)
+        adapterSearched.setListener(this, itemListener)
     }
 
     private fun goToViewerItem(idProduct: String) {
