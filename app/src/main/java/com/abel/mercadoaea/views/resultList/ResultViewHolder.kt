@@ -10,7 +10,7 @@ import com.abel.mercadoaea.util.listeners.OnClickItemRecyclerListener
 import com.bumptech.glide.Glide
 
 //todo Holder
-class SearchedViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+class ResultViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     var textViewTitle: TextView = v.findViewById(R.id.item_title)
     var imageViewCharacter: ImageView = v.findViewById(R.id.item_picture)
 

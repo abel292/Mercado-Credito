@@ -8,7 +8,12 @@ import com.abel.mercadoaea.util.listeners.OnLoadMoreListener
 
 
 abstract class BaseAdapterLoadMore<Object> : RecyclerView.Adapter<RecyclerView.ViewHolder?>() {
-    var list: ArrayList<Object?> = ArrayList()
+    var list: ArrayList<Object?> = arrayListOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
     protected var onClickListener: OnClickItemRecyclerListener<Object>? = null
     private var onLoadMoreListener: OnLoadMoreListener? = null
     private lateinit var recyclerView: RecyclerView
@@ -19,7 +24,9 @@ abstract class BaseAdapterLoadMore<Object> : RecyclerView.Adapter<RecyclerView.V
     val viewLoad = 0
 
     fun isNotInit(action: () -> Unit) {
-        clearList()
+        if (list.isNullOrEmpty()) {
+            action()
+        }
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -40,8 +47,15 @@ abstract class BaseAdapterLoadMore<Object> : RecyclerView.Adapter<RecyclerView.V
         }
     }
 
-    fun clearList() {
+    private fun clearList() {
         list.clear()
+        notifyDataSetChanged()
+    }
+
+    fun loadList(items: List<Object>) {
+        val arrayList = ArrayList<Object?>()
+        arrayList.addAll(items)
+        list = arrayList
         notifyDataSetChanged()
     }
 

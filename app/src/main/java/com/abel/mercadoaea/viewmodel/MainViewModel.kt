@@ -3,6 +3,7 @@ package com.abel.mercadoaea.viewmodel
 import androidx.lifecycle.MutableLiveData
 import com.abel.mercadoaea.data.api.ContsApi.Companion.MODO_CATEGORY
 import com.abel.mercadoaea.data.api.ContsApi.Companion.MODO_QUERY
+import com.abel.mercadoaea.data.database.SuggestEntity
 import com.abel.mercadoaea.data.model.category.ResponseCategory
 import com.abel.mercadoaea.data.model.search.ResponseSearch
 import com.abel.mercadoaea.data.model.suggest.ResponseSuggest
@@ -19,12 +20,14 @@ class MainViewModel(private val mercadoRepository: MercadoRepository) : BaseView
     var liveDataSuggest: MutableLiveData<Data<ResponseSuggest>> = MutableLiveData()
     var mainState: MutableLiveData<MainData> = MutableLiveData()
     val liveDataCategory = MutableLiveData<Data<ResponseCategory>>()
+    val liveDataLastViewed = MutableLiveData<Data<ResponseCategory>>()
+    val liveDataLastSearched = MutableLiveData<Data<List<SuggestEntity>>>()
 
     //endregion
 
     //region todo MAIN
-    fun hideSearchToolbar() {
-        mainState.value = MainData(StatusMain.SHOW_RESULTS)
+    fun changeStatusMain(status: StatusMain) {
+        mainState.value = MainData(status)
     }
     //endregion
 
@@ -46,10 +49,20 @@ class MainViewModel(private val mercadoRepository: MercadoRepository) : BaseView
     }
 
     fun getSuggest(q: String) = launch {
+        //traemos los que tenemos guardados localmente tambien
+        val historySearch = mercadoRepository.getHistorySearched(q)
+        if (historySearch.isNullOrEmpty()) {
+            liveDataLastSearched.value = Data(responseType = Status.EMPTY)
+        } else {
+            liveDataLastSearched.value = Data(responseType = Status.SUCCESSFUL, historySearch)
+        }
+
+        //buscamos sugerencias de autocompletado en api
         if (q.isEmpty()) {
             liveDataSuggest.value =
-                Data(responseType = Status.EMPTY, data = null)
+                Data(responseType = Status.EMPTY)
         } else {
+            changeStatusMain(StatusMain.SEARCHING)
             mercadoRepository.getSuggestApi(q).collect {
                 when (it) {
                     is ResultResource.Failure -> {
@@ -66,11 +79,11 @@ class MainViewModel(private val mercadoRepository: MercadoRepository) : BaseView
     }
 
     fun searchItems(query: String, offset: Int = 0) = launch {
-        hideSearchToolbar()
+        changeStatusMain(StatusMain.SHOW_RESULTS)
         when {
             query.contains(MODO_QUERY) -> {
                 val q = query.replace(MODO_QUERY, "")
-                mercadoRepository.getListSearchedItems(q, offset).collect {
+                mercadoRepository.searchedItem(q, offset).collect {
                     when (it) {
                         is ResultResource.Failure -> {
                             liveDataSearch.value =
@@ -85,7 +98,7 @@ class MainViewModel(private val mercadoRepository: MercadoRepository) : BaseView
             }
             query.contains(MODO_CATEGORY) -> {
                 val q = query.replace(MODO_CATEGORY, "")
-                mercadoRepository.getListSearchedCategory(q, offset).collect {
+                mercadoRepository.searchCategory(q, offset).collect {
                     when (it) {
                         is ResultResource.Failure -> {
                             liveDataSearch.value =

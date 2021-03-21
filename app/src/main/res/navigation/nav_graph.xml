@@ -9,29 +9,15 @@
         android:id="@+id/homeFragment"
         android:name="com.abel.mercadoaea.views.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_homeFragment_to_resultListFragment"
-            app:destination="@id/resultListFragment"
-            />
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_searchFragment"
             app:destination="@id/searchFragment"
-            app:popUpToInclusive="true"
-            app:launchSingleTop="true"/>
-    </fragment>
-
-    <fragment
-        android:id="@+id/resultListFragment"
-        android:name="com.abel.mercadoaea.views.resultList.ResultListFragment"
-        android:label="fragment_result_list"
-        tools:layout="@layout/fragment_result_list" >
-        <argument
-            android:name="argQuery"
-            app:argType="string" />
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_resultListFragment_to_viewerItemActivity"
-            app:destination="@id/viewerItemActivity" />
+            android:id="@+id/action_homeFragment_to_resultActivity"
+            app:destination="@id/resultActivity" />
     </fragment>
 
     <fragment
@@ -40,18 +26,25 @@
         android:label="fragment_search"
         tools:layout="@layout/fragment_suggest">
         <action
-            android:id="@+id/action_searchFragment_to_resultListFragment"
-            app:destination="@id/resultListFragment"
-            app:popUpToInclusive="false"
+            android:id="@+id/action_searchFragment_to_resultActivity"
+            app:destination="@id/resultActivity"
             app:popUpTo="@id/homeFragment"
-            />
+            app:popUpToInclusive="false"/>
     </fragment>
     <activity
         android:id="@+id/viewerItemActivity"
         android:name="com.abel.mercadoaea.views.viewerItem.ViewerItemActivity"
         android:label="activity_viewer_item"
-        tools:layout="@layout/activity_viewer_item" >
+        tools:layout="@layout/activity_viewer_item">
         <argument android:name="argIdProduct" />
+    </activity>
+    <activity
+        android:id="@+id/resultActivity"
+        android:name="com.abel.mercadoaea.views.resultList.ResultActivity"
+        android:label="ResultActivity">
+        <argument
+            android:name="argQuery"
+            app:argType="string" />
     </activity>
 
 </navigation>

@@ -1,14 +1,16 @@
 package com.abel.mercadoaea.injection
 
+import androidx.room.Room
 import com.abel.mercadoaea.BuildConfig
 import com.abel.mercadoaea.data.api.MercadoApi
+import com.abel.mercadoaea.data.database.AppDatabase
+import com.abel.mercadoaea.data.repositories.DataBaseRespository
 import com.abel.mercadoaea.data.repositories.MercadoRepository
 import com.abel.mercadoaea.viewmodel.MainViewModel
 import com.abel.mercadoaea.viewmodel.ViewerViewModel
 import com.abel.mercadoaea.views.adapter.GalleryAdapter
-import com.abel.mercadoaea.views.home.CategoryAdapter
-import com.abel.mercadoaea.views.resultList.SearchedAdapter
 import com.abel.mercadoaea.views.suggest.SuggestAdapter
+import com.abel.mercadoaea.views.suggest.SuggestLocalAdapter
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.koin.dsl.module
@@ -19,11 +21,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 val moduleApp = module {
-    single { MercadoRepository(get()) }
+    single { MercadoRepository(get(), get()) }
+    single { DataBaseRespository(get()) }
     single { provideMercadoApi() }
     single { SuggestAdapter() }
-    single { CategoryAdapter() }
-    factory { SearchedAdapter() }
+    single { SuggestLocalAdapter() }
     factory { GalleryAdapter() }
 }
 
@@ -37,6 +39,19 @@ fun provideMercadoApi(): MercadoApi = Retrofit.Builder()
 fun getGson(): Gson = GsonBuilder()
     .setLenient()
     .create()
+
+val databaseModule = module {
+    single {
+        val db: AppDatabase = get()
+        db.suggestDao()
+    }
+
+    single {
+        Room.databaseBuilder(get(), AppDatabase::class.java, "mercado_libre")
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+}
 
 val moduleViewModels = module {
     viewModel { MainViewModel(get()) }

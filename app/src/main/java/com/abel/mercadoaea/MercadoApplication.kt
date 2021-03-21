@@ -1,6 +1,7 @@
 package com.abel.mercadoaea
 
 import android.app.Application
+import com.abel.mercadoaea.injection.databaseModule
 import com.abel.mercadoaea.injection.moduleApp
 import com.abel.mercadoaea.injection.moduleViewModels
 import org.koin.android.ext.koin.androidContext
@@ -11,7 +12,7 @@ class MercadoApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@MercadoApplication)
-            modules(moduleApp, moduleViewModels)
+            modules(moduleApp, moduleViewModels, databaseModule)
         }
     }
 }

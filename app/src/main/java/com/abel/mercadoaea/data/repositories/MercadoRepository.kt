@@ -5,6 +5,7 @@ import com.abel.mercadoaea.data.api.ContsApi.Companion.LIMIT_SEARCH
 import com.abel.mercadoaea.data.api.ContsApi.Companion.V_API
 import com.abel.mercadoaea.data.api.ContsApi.Companion.LIMIT_SUGGEST
 import com.abel.mercadoaea.data.api.MercadoApi
+import com.abel.mercadoaea.data.database.SuggestEntity
 import com.abel.mercadoaea.data.model.description.ResponseDescription
 import com.abel.mercadoaea.data.model.item.ResponseItem
 import com.abel.mercadoaea.data.model.review.ResponseReview
@@ -15,7 +16,10 @@ import com.abel.mercadoaea.util.Status
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
-class MercadoRepository(private val mercadoApi: MercadoApi) {
+class MercadoRepository(
+    private val mercadoApi: MercadoApi,
+    private var dataBaseRespository: DataBaseRespository
+) {
 
     suspend fun getSuggestApi(q: String) = flow {
         val result = mercadoApi.getSuggest(false, LIMIT_SUGGEST, V_API, q)
@@ -27,18 +31,19 @@ class MercadoRepository(private val mercadoApi: MercadoApi) {
         emit(ResultResource.Failure())
     }
 
-    suspend fun getListSearchedItems(q: String, offset: Int) = flow {
+    suspend fun searchedItem(q: String, offset: Int) = flow {
+        dataBaseRespository.insertSuggest(SuggestEntity(q))
         val result = mercadoApi.getListSearchedItems(LIMIT_SEARCH, offset, q, "results")
         kotlinx.coroutines.delay(2000)
         when (result.code()) {
             200 -> emit(ResultResource.Success(result.body()!!))
             else -> emit(ResultResource.Failure())
         }
-    }.catch {
+    }/*.catch {
         emit(ResultResource.Failure())
-    }
+    }*/
 
-    suspend fun getListSearchedCategory(categoryId: String, offset: Int) = flow {
+    suspend fun searchCategory(categoryId: String, offset: Int) = flow {
         val result = mercadoApi.getLisSearchCategory(LIMIT_SEARCH, offset, categoryId, "results")
         kotlinx.coroutines.delay(2000)
         when (result.code()) {
@@ -87,5 +92,10 @@ class MercadoRepository(private val mercadoApi: MercadoApi) {
         }
     }.catch {
         emit(ResultResource.Failure())
+    }
+
+    //room
+    suspend fun getHistorySearched(q: String): List<SuggestEntity>? {
+        return dataBaseRespository.getSuggest(q)
     }
 }

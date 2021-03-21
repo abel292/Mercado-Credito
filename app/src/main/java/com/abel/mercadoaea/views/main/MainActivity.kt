@@ -1,14 +1,19 @@
 package com.abel.mercadoaea.views.main
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
-import androidx.core.app.ActivityManagerCompat
 import androidx.navigation.*
+import androidx.navigation.fragment.NavHostFragment
 import com.abel.mercadoaea.R
+import com.abel.mercadoaea.data.api.ContsApi
 import com.abel.mercadoaea.util.*
 import com.abel.mercadoaea.viewmodel.MainViewModel
+import com.abel.mercadoaea.views.resultList.ResultActivity
 import com.abel.mercadoaea.views.suggest.SuggestFragmentDirections
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -16,13 +21,14 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private val viewModel by viewModel<MainViewModel>()
-    private lateinit var navController: NavController
+    private val navController: NavController by lazy {
+        findNavController(R.id.nav_host_fragment)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        navController = findNavController(R.id.nav_host_fragment)
         viewModel.mainState.observe(::getLifecycle, ::updateUI)
         configSearch()
     }
@@ -34,6 +40,11 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             }
             StatusMain.LOADING -> {
             }
+            StatusMain.SEARCHING -> {
+                goToSearch()
+            }
+            StatusMain.HOME -> {
+            }
         }
     }
 
@@ -44,27 +55,50 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        newText?.let { viewModel.getSuggest(it) }
+        newText?.let {
+            viewModel.getSuggest(it)
+        }
         return false
     }
 
     private fun configSearch() {
         searchItems.setOnQueryTextListener(this)
         searchItems.onActionViewCollapsed()
-        searchItems.setOnSearchClickListener {
-            goToSearch()
-        }
     }
 
     private fun goToResultList(query: String) {
         searchItems.onActionViewCollapsed()
-        val direction: NavDirections =
-            SuggestFragmentDirections.actionSearchFragmentToResultListFragment(query)
-        navController.navigate(direction)
+        showSearchedResult(query + ContsApi.MODO_QUERY)
     }
 
     private fun goToSearch() {
-        navController.navigate(R.id.action_homeFragment_to_searchFragment)
+        when (NavHostFragment.findNavController(nav_host_fragment).currentDestination?.id) {
+            R.id.searchFragment -> {
+            }
+            else -> navController.navigate(R.id.action_homeFragment_to_searchFragment)
+
+        }
+    }
+
+    override fun onBackPressed() {
+        when (NavHostFragment.findNavController(nav_host_fragment).currentDestination?.id) {
+            R.id.homeFragment -> {
+                AlertDialog.Builder(this).setMessage("Salir").setPositiveButton(
+                    "Ok"
+                ) { dialogInterface, i ->
+                    finish()
+                }.show()
+            }
+            else -> {
+                super.onBackPressed()
+            }
+        }
+    }
+
+    private fun showSearchedResult(query: String) {
+        val intent = Intent(this, ResultActivity::class.java)
+        intent.putExtra(ResultActivity.KEY_QUERY_EXTRA, query)
+        startActivity(intent)
     }
 
 }

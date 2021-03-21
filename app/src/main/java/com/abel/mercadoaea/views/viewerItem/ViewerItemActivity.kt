@@ -5,14 +5,12 @@ import android.os.Bundle
 import com.abel.mercadoaea.R
 import com.abel.mercadoaea.data.model.item.Picture
 import com.abel.mercadoaea.data.model.item.ResponseItem
-import com.abel.mercadoaea.data.model.search.Result
 import com.abel.mercadoaea.util.Data
 import com.abel.mercadoaea.util.StatusViewer
 import com.abel.mercadoaea.util.ViewerData
 import com.abel.mercadoaea.util.listeners.OnClickItemRecyclerListener
 import com.abel.mercadoaea.viewmodel.ViewerViewModel
 import com.abel.mercadoaea.views.adapter.GalleryAdapter
-import com.abel.mercadoaea.views.resultList.SearchedAdapter
 import kotlinx.android.synthetic.main.activity_viewer_item.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -21,8 +19,7 @@ class ViewerItemActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<ViewerViewModel>()
     private val galleryAdapter: GalleryAdapter by inject()
-    private val itemPictureListener = OnClickItemRecyclerListener<Picture> { picture ->
-    }
+    private val itemPictureListener = OnClickItemRecyclerListener<Picture> { picture -> }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
