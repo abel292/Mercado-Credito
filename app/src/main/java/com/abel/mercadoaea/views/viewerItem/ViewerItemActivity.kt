@@ -1,5 +1,6 @@
 package com.abel.mercadoaea.views.viewerItem
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
@@ -9,15 +10,12 @@ import com.abel.mercadoaea.data.model.description.ResponseDescription
 import com.abel.mercadoaea.data.model.item.Picture
 import com.abel.mercadoaea.data.model.item.ResponseItem
 import com.abel.mercadoaea.data.model.review.ResponseReview
-import com.abel.mercadoaea.databinding.ActivityResultBinding
 import com.abel.mercadoaea.databinding.ActivityViewerItemBinding
-import com.abel.mercadoaea.util.Data
-import com.abel.mercadoaea.util.Status
-import com.abel.mercadoaea.util.StatusViewer
-import com.abel.mercadoaea.util.ViewerData
+import com.abel.mercadoaea.util.*
 import com.abel.mercadoaea.util.listeners.OnClickItemRecyclerListener
 import com.abel.mercadoaea.viewmodel.ViewerViewModel
 import com.abel.mercadoaea.views.adapter.GalleryAdapter
+import com.github.tntkhang.fullscreenimageview.library.FullScreenImageViewActivity
 import kotlinx.android.synthetic.main.activity_viewer_item.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,13 +27,18 @@ class ViewerItemActivity : AppCompatActivity() {
     private lateinit var reviewsAdapter: ReviewAdapter
     private lateinit var atributtesAdapter: AtributtesAdapter
     private lateinit var binding: ActivityViewerItemBinding
-    private val itemPictureListener = OnClickItemRecyclerListener<Picture> { picture -> }
+    private val itemPictureListener = OnClickItemRecyclerListener { pictures: List<Picture> ->
+        showFullScreen(galleryAdapter.getItems())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_viewer_item)
         binding.recyclerViewReviews.layoutManager = LinearLayoutManager(this)
         binding.recyclerViewAtributes.layoutManager = LinearLayoutManager(this)
+        binding.textViewDescripcion.setOnClickListener {
+            binding.textViewDescripcion.toggle()
+        }
         reviewsAdapter = ReviewAdapter()
         atributtesAdapter = AtributtesAdapter()
         binding.adapteReviews = reviewsAdapter
@@ -49,6 +52,7 @@ class ViewerItemActivity : AppCompatActivity() {
         viewModel.getItemComplete(argIdProduct)
         viewModel.getReview(argIdProduct)
         viewModel.getDescription(argIdProduct)
+
     }
 
     override fun onBackPressed() {
@@ -59,6 +63,8 @@ class ViewerItemActivity : AppCompatActivity() {
     private fun configUI(dataItem: Data<ResponseItem>?) {
         dataItem?.data?.pictures?.let { configGallery(it) }
         dataItem?.data?.attributes?.let { atributtesAdapter.loadList(it) }
+        dataItem?.data?.price?.let { binding.textViewPriceViewer.text = it.toString() }
+        dataItem?.data?.title?.let { binding.textViewTitleViewer.text = it }
 
     }
 
@@ -70,7 +76,11 @@ class ViewerItemActivity : AppCompatActivity() {
             }
             Status.SUCCESSFUL -> {
                 dataItem.data?.let {
-                    binding.textViewDescripcion.text = it.plain_text
+                    binding.textViewDescripcion.text = if (it.plain_text.isEmpty()) {
+                        getString(R.string.with_out_description)
+                    } else {
+                        it.plain_text
+                    }
                 }
             }
         }
@@ -87,6 +97,8 @@ class ViewerItemActivity : AppCompatActivity() {
                     reviewsAdapter.loadList(it)
                     binding.textViewPromedioReview.text =
                         (dataItem.data?.rating_average ?: 0.0f).toString()
+
+                    binding.ratingPromedio.rating = dataItem.data?.rating_average ?: 0.0f
                 }
             }
         }
@@ -107,5 +119,13 @@ class ViewerItemActivity : AppCompatActivity() {
         galleryAdapter.addItems(pictures)
         galleryView.setSliderAdapter(galleryAdapter)
     }
+
+    private fun showFullScreen(uriString: ArrayList<String>) {
+        val fullImageIntent = Intent(this, FullScreenImageViewActivity::class.java)
+        fullImageIntent.putExtra(FullScreenImageViewActivity.URI_LIST_DATA, uriString)
+        fullImageIntent.putExtra(FullScreenImageViewActivity.IMAGE_FULL_SCREEN_CURRENT_POS, 0)
+        startActivity(fullImageIntent)
+    }
+
 }
 

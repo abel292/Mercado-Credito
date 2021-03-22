@@ -12,10 +12,22 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:textViewStyle">@style/styleTextView</item>
+
+    </style>
+
+
+    <style name="styleTextView" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/champagne_limousines</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+
     </style>
 
     <style name="styleTextViewTitle" parent="android:Widget.TextView">
-        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/champagne_limousines_bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">22sp</item>
     </style>
 
     <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">

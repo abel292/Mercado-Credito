@@ -9,16 +9,16 @@ import androidx.room.Query
 @Dao
 interface SuggestDao {
 
-    @Query("SELECT * FROM SuggestEntity")
+    @Query("SELECT * FROM _SUGGEST_ENTITY")
     fun allLive(): LiveData<List<SuggestEntity>>
 
-    @get:Query("SELECT count(*) FROM SuggestEntity")
+    @get:Query("SELECT count(*) FROM _SUGGEST_ENTITY")
     val count: Int
 
-    @Query("SELECT * FROM SuggestEntity WHERE suggest LIKE :q LIMIT :limit")
+    @Query("SELECT * FROM _SUGGEST_ENTITY WHERE suggest LIKE :q LIMIT :limit")
     suspend fun getByUserQuery(q: String, limit: Int): List<SuggestEntity>?
 
-    @Query("SELECT * FROM SuggestEntity LIMIT :limit")
+    @Query("SELECT * FROM _SUGGEST_ENTITY ORDER BY ID DESC LIMIT :limit")
     suspend fun getLastSuggest(limit: Int): List<SuggestEntity>?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

@@ -15,21 +15,29 @@ import com.smarteist.autoimageslider.SliderViewAdapter
 
 class GalleryAdapter() :
     SliderViewAdapter<GalleryAdapter.SliderAdapterVH>() {
-    private var mSliderItems: MutableList<Picture> = ArrayList()
-    private lateinit var onClickListenerPhoto: OnClickItemRecyclerListener<Picture>
+    private var mSliderItems: ArrayList<Picture> = ArrayList()
+    private lateinit var onClickListenerPhoto: OnClickItemRecyclerListener<List<Picture>>
     private lateinit var context: Context
 
     fun setContext(context: Context) {
         this.context = context
     }
 
-    fun setListener(onClickListenerPhoto: OnClickItemRecyclerListener<Picture>) {
+    fun setListener(onClickListenerPhoto: OnClickItemRecyclerListener<List<Picture>>) {
         this.onClickListenerPhoto = onClickListenerPhoto
     }
 
     fun addItems(sliderItem: List<Picture>) {
         mSliderItems.addAll(sliderItem)
         notifyDataSetChanged()
+    }
+
+    fun getItems():ArrayList<String>{
+        val photos= ArrayList<String>()
+        mSliderItems.forEach {
+            photos.add(it.url)
+        }
+        return photos
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): SliderAdapterVH {
@@ -43,15 +51,15 @@ class GalleryAdapter() :
         if (context.isValidGlideContext()) {
             Glide.with(context)
                 .load(sliderItem.url)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
+                .placeholder(R.drawable.ic_placeholder)
+                .error(R.drawable.ic_placeholder)
                 .override(500, 500)
                 .centerCrop()
                 .into(viewHolder.imageViewBackground)
         }
 
         viewHolder.imageViewBackground.setOnClickListener {
-            onClickListenerPhoto.onClick(sliderItem)
+            onClickListenerPhoto.onClickPosition(mSliderItems, position)
         }
     }
 

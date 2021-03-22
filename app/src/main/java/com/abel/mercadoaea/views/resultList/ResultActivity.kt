@@ -19,6 +19,7 @@ class ResultActivity : BaseActivity(), OnLoadMoreListener {
     private val viewModel: MainViewModel by viewModel()
     private lateinit var binding: ActivityResultBinding
     private lateinit var query: String
+    private lateinit var title: String
     private lateinit var adapter: ResultAdapter
     private val itemListener =
         OnClickItemRecyclerListener<Result> { result -> show(result.id) }
@@ -31,7 +32,6 @@ class ResultActivity : BaseActivity(), OnLoadMoreListener {
         binding.adapter = adapter
         binding.recyclerViewSearched.layoutManager = GridLayoutManager(this, 2)
         binding.viewModel = viewModel
-
         viewModel.liveDataSearch.observe(::getLifecycle, ::updateUISearch)
         query = ResultActivityArgs.fromBundle(bundle = intent.extras!!).argQuery
         viewModel.searchItems(query)
@@ -44,6 +44,7 @@ class ResultActivity : BaseActivity(), OnLoadMoreListener {
             Status.EMPTY -> {
             }
             Status.SUCCESSFUL -> {
+                binding.textViewTitleResult.text = results.data?.title
                 results.data?.results?.let {
                     adapter.addMoreItems(it)
                 }

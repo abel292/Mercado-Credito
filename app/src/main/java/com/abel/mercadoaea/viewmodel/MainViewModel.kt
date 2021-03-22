@@ -108,6 +108,7 @@ class MainViewModel(private val mercadoRepository: MercadoRepository) : BaseView
                                 Data(responseType = Status.ERROR, error = it.exception)
                         }
                         is ResultResource.Success -> {
+                            it.data.title = q
                             liveDataSearch.value =
                                 Data(responseType = Status.SUCCESSFUL, data = it.data)
                         }
@@ -123,6 +124,8 @@ class MainViewModel(private val mercadoRepository: MercadoRepository) : BaseView
                                 Data(responseType = Status.ERROR, error = it.exception)
                         }
                         is ResultResource.Success -> {
+                            it.data.title = it.data.filters?.get(0)?.values?.get(0)?.name
+                                ?: "Categoria"
                             liveDataSearch.value =
                                 Data(responseType = Status.SUCCESSFUL, data = it.data)
                         }

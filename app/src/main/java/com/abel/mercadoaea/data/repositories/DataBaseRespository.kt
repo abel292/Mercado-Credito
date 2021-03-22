@@ -28,7 +28,7 @@ class DataBaseRespository(var database: AppDatabase) {
     }
 
     suspend fun getItems(): List<ItemEntity>? {
-        return database.itemDao().getLastItem(3)
+        return database.itemDao().getLastItem(5)
     }
 
 }

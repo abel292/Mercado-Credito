@@ -39,10 +39,17 @@ class MercadoRepository(
     }
 
     suspend fun searchCategory(categoryId: String, offset: Int) = flow {
-        val result = mercadoApi.getLisSearchCategory(LIMIT_SEARCH, offset, categoryId, "results")
+        val result =
+            mercadoApi.getLisSearchCategory(LIMIT_SEARCH, offset, categoryId, "results,filters")
         kotlinx.coroutines.delay(2000)
         when (result.code()) {
-            200 -> emit(ResultResource.Success(result.body()!!))
+            200 -> {
+                if (result.body() != null) {
+                    emit(ResultResource.Success(result.body()!!))
+                } else {
+                    emit(ResultResource.Failure())
+                }
+            }
             else -> emit(ResultResource.Failure())
         }
     }.catch {

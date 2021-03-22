@@ -34,6 +34,7 @@
 
                 <TextView
                     android:id="@+id/textView2"
+                    style="@style/styleTextViewTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/ultimos_productos_vistos"
@@ -72,6 +73,7 @@
 
                     <TextView
                         android:id="@+id/textView"
+                        style="@style/styleTextViewTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"

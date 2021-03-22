@@ -8,7 +8,7 @@ import androidx.room.Query
 
 @Dao
 interface ItemDao {
-    @Query("SELECT * FROM ItemEntity LIMIT :limit")
+    @Query("SELECT * FROM _ITEM_ENTITY ORDER BY ID_CREATED DESC LIMIT :limit ")
     suspend fun getLastItem(limit: Int): List<ItemEntity>?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

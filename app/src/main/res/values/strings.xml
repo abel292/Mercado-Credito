@@ -14,4 +14,7 @@
     <string name="peso">$</string>
     <string name="opiniones_sobre_el_producto">Opiniones sobre el producto</string>
     <string name="cero">0.0</string>
+    <string name="generic_title">%s</string>
+    <string name="caracteristicas">Caracteristicas:</string>
+    <string name="with_out_description">Este producto no tiene descripcion</string>
 </resources>

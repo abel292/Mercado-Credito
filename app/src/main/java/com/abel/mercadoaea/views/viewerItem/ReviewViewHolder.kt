@@ -8,6 +8,7 @@ import com.abel.mercadoaea.R
 import com.abel.mercadoaea.data.model.review.Review
 import com.abel.mercadoaea.databinding.ItemReviewBinding
 import com.abel.mercadoaea.util.listeners.OnClickItemRecyclerListener
+import com.abel.mercadoaea.util.toast
 
 //todo Holder
 class ReviewViewHolder(private val binding: ItemReviewBinding) :
@@ -20,7 +21,7 @@ class ReviewViewHolder(private val binding: ItemReviewBinding) :
         binding.review = review
         itemView.setOnClickListener {
             if (review != null) {
-                onClickListener?.onClick(review)
+                binding.root.context.toast("Esta funcionalidad esta pendiente")
             }
         }
     }

@@ -35,7 +35,7 @@
             android:lines="1"
             android:text="@{category.name}"
             android:textColor="@android:color/black"
-            android:textSize="16sp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/item_picture_category"
             app:layout_constraintStart_toStartOf="parent"
