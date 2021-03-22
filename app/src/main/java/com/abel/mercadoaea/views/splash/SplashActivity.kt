@@ -7,6 +7,7 @@ import android.os.Looper
 import androidx.databinding.DataBindingUtil
 import com.abel.mercadoaea.R
 import com.abel.mercadoaea.databinding.ActivitySplashBinding
+import com.abel.mercadoaea.util.setOnClick
 import com.abel.mercadoaea.views.base.BaseActivity
 import com.abel.mercadoaea.views.main.MainActivity
 
@@ -20,7 +21,7 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun initListener() {
-        binding.floatingActionButton.setOnClickListener {
+        binding.floatingActionButton.setOnClick {
             goToMainActivity()
         }
 
@@ -32,6 +33,6 @@ class SplashActivity : BaseActivity() {
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             finish()
-        }, 1550L)
+        }, 500)
     }
 }

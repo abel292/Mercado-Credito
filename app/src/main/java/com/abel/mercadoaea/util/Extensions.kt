@@ -5,6 +5,8 @@ import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
 import android.content.ContextWrapper
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -42,4 +44,19 @@ fun View.getParentActivity(): AppCompatActivity? {
         context = context.baseContext
     }
     return null
+}
+
+@SuppressLint("ClickableViewAccessibility")
+fun View.setOnClick(clickEvent: () -> Unit) {
+    this.setOnTouchListener { _, event ->
+        try {
+            if (event.action == MotionEvent.ACTION_UP) {
+                clickEvent.invoke()
+            }
+            false
+        } catch (e: Exception) {
+            Log.e(this.javaClass.name, "error en Onclick: $e")
+            false
+        }
+    }
 }

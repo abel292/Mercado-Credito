@@ -2,16 +2,18 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layoutDescription="@xml/activity_main_xml_constraintlayout2_scene">
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchItems"
             style="@style/SearchViewStyle"
-            android:background="@drawable/gradient"
             android:layout_width="0dp"
             android:layout_height="@dimen/dimen_toolbar"
+            android:background="@drawable/gradient"
             android:layoutDirection="rtl"
             android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
             app:closeIcon="@drawable/ic_cross"
@@ -35,5 +37,5 @@
             app:layout_constraintTop_toBottomOf="@+id/searchItems"
             app:navGraph="@navigation/nav_graph" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

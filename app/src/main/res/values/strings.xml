@@ -17,4 +17,7 @@
     <string name="generic_title">%s</string>
     <string name="caracteristicas">Caracteristicas:</string>
     <string name="with_out_description">Este producto no tiene descripcion</string>
+    <string name="bienvenido_a_mercado_aea">Bienvenido a Mercado AEA</string>
+    <string name="la_mejor_forma_de_buscar_productos_de_mercado_libre">Productos de Mercado libre</string>
+    <string name="by_abel_aguilar">By Abel Aguilar</string>
 </resources>
