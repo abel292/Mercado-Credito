@@ -1,17 +1,19 @@
 package com.abel.mercadoaea.views.resultList
 
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.View
+import androidx.constraintlayout.motion.widget.MotionLayout
 import com.abel.mercadoaea.data.model.search.ResponseSearch
 import com.abel.mercadoaea.data.model.search.Result
 import com.abel.mercadoaea.databinding.ActivityResultBinding
-import com.abel.mercadoaea.util.Data
-import com.abel.mercadoaea.util.Status
 import com.abel.mercadoaea.util.listeners.OnClickItemRecyclerListener
 import com.abel.mercadoaea.util.listeners.OnLoadMoreListener
 import com.abel.mercadoaea.viewmodel.MainViewModel
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import com.abel.mercadoaea.R
+import com.abel.mercadoaea.util.*
 import com.abel.mercadoaea.views.base.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -19,7 +21,6 @@ class ResultActivity : BaseActivity(), OnLoadMoreListener {
     private val viewModel: MainViewModel by viewModel()
     private lateinit var binding: ActivityResultBinding
     private lateinit var query: String
-    private lateinit var title: String
     private lateinit var adapter: ResultAdapter
     private val itemListener =
         OnClickItemRecyclerListener<Result> { result -> result.id?.let { show(it) } }
@@ -44,14 +45,15 @@ class ResultActivity : BaseActivity(), OnLoadMoreListener {
             Status.EMPTY -> {
             }
             Status.SUCCESSFUL -> {
-                binding.textViewTitleResult.text = results.data?.title
-                results.data?.results?.let {
-                    adapter.addMoreItems(it)
-                }
+                binding.result = results.data
+                results.data?.results?.let { adapter.addMoreItems(it) }
             }
         }
-        viewModel.hideLoading()
+        if (binding.constraintLayout4.currentState == binding.constraintLayout4.startState) {
+            binding.constraintLayout4.transitionToEnd()
+        }
     }
+
 
     override fun onLoadMore(offset: Int) {
         adapter.modeLoading()
