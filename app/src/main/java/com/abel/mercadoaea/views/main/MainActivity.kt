@@ -1,43 +1,41 @@
 package com.abel.mercadoaea.views.main
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.*
 import androidx.navigation.fragment.NavHostFragment
 import com.abel.mercadoaea.R
 import com.abel.mercadoaea.data.api.ContsApi
+import com.abel.mercadoaea.databinding.ActivityMainBinding
 import com.abel.mercadoaea.util.*
 import com.abel.mercadoaea.viewmodel.MainViewModel
 import com.abel.mercadoaea.views.base.BaseActivity
-import com.abel.mercadoaea.views.resultList.ResultActivity
-import com.abel.mercadoaea.views.suggest.SuggestFragmentDirections
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.toolbar.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : BaseActivity(), SearchView.OnQueryTextListener {
 
     private val viewModel by viewModel<MainViewModel>()
+    private lateinit var binding: ActivityMainBinding
     private val navController: NavController by lazy {
         findNavController(R.id.nav_host_fragment)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.searchItems.setOnQueryTextListener(this)
+        binding.searchItems.onActionViewCollapsed()
         viewModel.mainState.observe(::getLifecycle, ::updateUI)
-        configSearch()
     }
 
     private fun updateUI(results: MainData) {
         when (results.responseType) {
             StatusMain.SHOW_RESULTS -> {
-                searchItems.onActionViewCollapsed()
+                binding.searchItems.onActionViewCollapsed()
             }
             StatusMain.LOADING -> {
             }
@@ -50,7 +48,7 @@ class MainActivity : BaseActivity(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        searchItems.onActionViewCollapsed()
+        binding.searchItems.onActionViewCollapsed()
         query?.let { goToResultList(it) }
         return false
     }
@@ -62,13 +60,8 @@ class MainActivity : BaseActivity(), SearchView.OnQueryTextListener {
         return false
     }
 
-    private fun configSearch() {
-        searchItems.setOnQueryTextListener(this)
-        searchItems.onActionViewCollapsed()
-    }
-
     private fun goToResultList(query: String) {
-        searchItems.onActionViewCollapsed()
+        binding.searchItems.onActionViewCollapsed()
         showSearchedResult(query + ContsApi.MODO_QUERY)
     }
 

@@ -9,4 +9,6 @@
     <string name="categor_as">Categorías</string>
     <string name="ultimos_productos_vistos">Ultimos productos vistos</string>
     <string name="error_sin_filtro">No se aplico ningun filtro</string>
+    <string name="titulo">titulo</string>
+    <string name="buscar">Buscar producto</string>
 </resources>

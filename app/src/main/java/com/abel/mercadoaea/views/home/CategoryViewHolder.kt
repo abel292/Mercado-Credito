@@ -1,22 +1,21 @@
 package com.abel.mercadoaea.views.home
 
-import android.view.View
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.abel.mercadoaea.R
 import com.abel.mercadoaea.data.model.category.ResponseCategoryItem
+import com.abel.mercadoaea.databinding.ItemCategoryBinding
 import com.abel.mercadoaea.util.listeners.OnClickItemRecyclerListener
 
-class CategoryViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-    var textViewTitle: TextView = v.findViewById(R.id.item_title_category)
+class CategoryViewHolder(private val binding: ItemCategoryBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+
     fun bind(
-        result: ResponseCategoryItem?,
+        categoryItem: ResponseCategoryItem?,
         onClickListener: OnClickItemRecyclerListener<ResponseCategoryItem>?
     ) {
-        textViewTitle.text = result?.name
+        binding.category = categoryItem
         itemView.setOnClickListener {
-            if (result != null) {
-                onClickListener?.onClick(result)
+            if (categoryItem != null) {
+                onClickListener?.onClick(categoryItem)
             }
         }
     }
