@@ -96,9 +96,9 @@ class MercadoRepository(
             }
             else -> emit(ResultResource.Failure())
         }
-    }.catch {
+    }/*.catch {
         emit(ResultResource.Failure())
-    }
+    }*/
 
     //room
     suspend fun getHistoryViewed(): List<ItemEntity>? {

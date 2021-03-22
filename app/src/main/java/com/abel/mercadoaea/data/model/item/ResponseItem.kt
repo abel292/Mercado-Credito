@@ -5,7 +5,7 @@ data class ResponseItem(
     val attributes: List<Attribute>,
     val automatic_relist: Boolean,
     val available_quantity: Int,
-    val base_price: Int,
+    var base_price: Double,
     val buying_mode: String,
     val catalog_listing: Boolean,
     val catalog_product_id: String,
@@ -32,7 +32,7 @@ data class ResponseItem(
     val parent_item_id: Any,
     val permalink: String,
     val pictures: List<Picture>,
-    val price: Int,
+    var price: Double,
     val sale_terms: List<Any>,
     val secure_thumbnail: String,
     val seller_address: SellerAddress,
@@ -54,4 +54,6 @@ data class ResponseItem(
     val video_id: String,
     val warnings: List<Any>,
     val warranty: String
-)
+) {
+    var descriptionsCompleted: String = "Este producto no tiene descripcion"
+}

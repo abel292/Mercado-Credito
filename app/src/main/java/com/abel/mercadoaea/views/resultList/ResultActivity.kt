@@ -22,7 +22,7 @@ class ResultActivity : BaseActivity(), OnLoadMoreListener {
     private lateinit var title: String
     private lateinit var adapter: ResultAdapter
     private val itemListener =
-        OnClickItemRecyclerListener<Result> { result -> show(result.id) }
+        OnClickItemRecyclerListener<Result> { result -> result.id?.let { show(it) } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

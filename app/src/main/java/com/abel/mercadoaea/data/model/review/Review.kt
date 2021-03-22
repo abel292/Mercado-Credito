@@ -1,9 +1,9 @@
 package com.abel.mercadoaea.data.model.review
 
 data class Review(
-    val buying_date: String,
-    val content: String,
-    val date_created: String,
+    val buying_date: String?,
+    val content: String?,
+    val date_created: String?,
     val dislikes: Int,
     val forbidden_words: Int,
     val id: Int,

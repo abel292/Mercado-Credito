@@ -31,7 +31,7 @@
             android:id="@+id/item_value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="150dp"
+            android:layout_marginStart="160dp"
             android:hint="@string/descripci_n"
             android:maxLines="4"
             android:text="@{attribute.value_name}"

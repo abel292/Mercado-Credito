@@ -66,6 +66,8 @@
                 android:hint="@string/precio"
                 android:text="@{item.price}"
                 style="@style/styleTextViewTitle"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:textColor="@color/price"
                 app:layout_constraintBottom_toBottomOf="@+id/textView8"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.abel.mercadoaea.R
-import com.abel.mercadoaea.data.model.description.ResponseDescription
 import com.abel.mercadoaea.data.model.item.Picture
 import com.abel.mercadoaea.data.model.item.ResponseItem
 import com.abel.mercadoaea.data.model.review.ResponseReview
@@ -36,22 +35,17 @@ class ViewerItemActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_viewer_item)
         binding.recyclerViewReviews.layoutManager = LinearLayoutManager(this)
         binding.recyclerViewAtributes.layoutManager = LinearLayoutManager(this)
-        binding.textViewDescripcion.setOnClickListener {
-            binding.textViewDescripcion.toggle()
-        }
         reviewsAdapter = ReviewAdapter()
         atributtesAdapter = AtributtesAdapter()
         binding.adapteReviews = reviewsAdapter
         binding.adapterAttribute = atributtesAdapter
+        binding.viewModel = viewModel
         val argIdProduct = ViewerItemActivityArgs.fromBundle(bundle = intent.extras!!).argIdProduct
 
-        viewModel.viewerState.observe(::getLifecycle, ::updateUI)
         viewModel.liveDataItem.observe(::getLifecycle, ::configUI)
         viewModel.liveDataReview.observe(::getLifecycle, ::configReviews)
-        viewModel.liveDataDescription.observe(::getLifecycle, ::configDescription)
         viewModel.getItemComplete(argIdProduct)
         viewModel.getReview(argIdProduct)
-        viewModel.getDescription(argIdProduct)
 
     }
 
@@ -61,29 +55,12 @@ class ViewerItemActivity : AppCompatActivity() {
     }
 
     private fun configUI(dataItem: Data<ResponseItem>?) {
-        dataItem?.data?.pictures?.let { configGallery(it) }
-        dataItem?.data?.attributes?.let { atributtesAdapter.loadList(it) }
-        dataItem?.data?.price?.let { binding.textViewPriceViewer.text = it.toString() }
-        dataItem?.data?.title?.let { binding.textViewTitleViewer.text = it }
-
-    }
-
-    private fun configDescription(dataItem: Data<ResponseDescription>) {
-        when (dataItem.responseType) {
-            Status.ERROR -> {
-            }
-            Status.EMPTY -> {
-            }
-            Status.SUCCESSFUL -> {
-                dataItem.data?.let {
-                    binding.textViewDescripcion.text = if (it.plain_text.isEmpty()) {
-                        getString(R.string.with_out_description)
-                    } else {
-                        it.plain_text
-                    }
-                }
-            }
+        dataItem?.let { item ->
+            item.data?.pictures?.let { configGallery(it) }
+            item.data?.attributes?.let { atributtesAdapter.loadList(it) }
+            binding.item = item.data
         }
+        viewModel.hideLoading()
     }
 
     private fun configReviews(dataItem: Data<ResponseReview>) {
@@ -97,21 +74,12 @@ class ViewerItemActivity : AppCompatActivity() {
                     reviewsAdapter.loadList(it)
                     binding.textViewPromedioReview.text =
                         (dataItem.data?.rating_average ?: 0.0f).toString()
-
                     binding.ratingPromedio.rating = dataItem.data?.rating_average ?: 0.0f
                 }
             }
         }
     }
 
-    private fun updateUI(data: ViewerData) {
-        when (data.responseType) {
-            StatusViewer.SHOW_ITEM -> {
-            }
-            StatusViewer.LOADING -> {
-            }
-        }
-    }
 
     private fun configGallery(pictures: List<Picture>) {
         galleryAdapter.setContext(this)

@@ -28,6 +28,10 @@ class MainActivity : BaseActivity(), SearchView.OnQueryTextListener {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.searchItems.setOnQueryTextListener(this)
+        binding.searchItems.setOnCloseListener {
+            backHome()
+            false
+        }
         binding.searchItems.onActionViewCollapsed()
         viewModel.mainState.observe(::getLifecycle, ::updateUI)
     }
@@ -71,6 +75,18 @@ class MainActivity : BaseActivity(), SearchView.OnQueryTextListener {
             }
             else -> navController.navigate(R.id.action_homeFragment_to_searchFragment)
 
+        }
+    }
+
+    private fun backHome(){
+        try {
+            when (NavHostFragment.findNavController(nav_host_fragment).currentDestination?.id) {
+                R.id.searchFragment -> {
+                    super.onBackPressed()
+                }
+            }
+        } catch (e: Exception) {
+            onBackPressed()
         }
     }
 
