@@ -1,5 +1,6 @@
 package com.abel.mercadoaea.viewmodel
 
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.abel.mercadoaea.data.api.ContsApi.Companion.MODO_CATEGORY
 import com.abel.mercadoaea.data.api.ContsApi.Companion.MODO_QUERY
@@ -23,6 +24,8 @@ class MainViewModel(private val mercadoRepository: MercadoRepository) : BaseView
     val liveDataCategory = MutableLiveData<Data<ResponseCategory>>()
     val liveDataLastViewedSeed = MutableLiveData<Data<List<ItemEntity>>>()
     val liveDataLastSearched = MutableLiveData<Data<List<SuggestEntity>>>()
+    val loadingVisibility: MutableLiveData<Int> = MutableLiveData()
+
 
     //endregion
 
@@ -30,6 +33,11 @@ class MainViewModel(private val mercadoRepository: MercadoRepository) : BaseView
     fun changeStatusMain(status: StatusMain) {
         mainState.value = MainData(status)
     }
+
+    fun hideLoading() = launch {
+        loadingVisibility.value = View.GONE
+    }
+
     //endregion
 
     //region todo DATA

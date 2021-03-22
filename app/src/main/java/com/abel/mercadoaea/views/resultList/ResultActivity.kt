@@ -10,6 +10,7 @@ import com.abel.mercadoaea.util.listeners.OnClickItemRecyclerListener
 import com.abel.mercadoaea.util.listeners.OnLoadMoreListener
 import com.abel.mercadoaea.viewmodel.MainViewModel
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import com.abel.mercadoaea.R
 import com.abel.mercadoaea.views.base.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -28,6 +29,7 @@ class ResultActivity : BaseActivity(), OnLoadMoreListener {
         adapter = ResultAdapter()
         adapter.setListener(this, itemListener)
         binding.adapter = adapter
+        binding.recyclerViewSearched.layoutManager = GridLayoutManager(this, 2)
         binding.viewModel = viewModel
 
         viewModel.liveDataSearch.observe(::getLifecycle, ::updateUISearch)
@@ -47,6 +49,7 @@ class ResultActivity : BaseActivity(), OnLoadMoreListener {
                 }
             }
         }
+        viewModel.hideLoading()
     }
 
     override fun onLoadMore(offset: Int) {

@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="item"
+            type="com.abel.mercadoaea.data.model.item.ResponseItem" />
 
         <variable
             name="adapteReviews"
             type="com.abel.mercadoaea.views.viewerItem.ReviewAdapter" />
 
+        <variable
+            name="adapterAttribute"
+            type="com.abel.mercadoaea.views.viewerItem.AtributtesAdapter" />
+
+        <variable
+            name="review"
+            type="com.abel.mercadoaea.data.model.review.ResponseReview" />
+
     </data>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -42,11 +56,12 @@
                 android:id="@+id/textViewPriceViewer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="10dp"
                 android:text="@string/precio"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/galleryView" />
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView4"
+                app:layout_constraintStart_toEndOf="@+id/textView4"
+                app:layout_constraintTop_toTopOf="@+id/textView4" />
 
             <TextView
                 android:id="@+id/textViewCurrency"
@@ -62,19 +77,34 @@
                 android:id="@+id/textViewTitleViewer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
                 android:text="TextView"
-                app:layout_constraintStart_toStartOf="@+id/textViewPriceViewer"
+                app:layout_constraintStart_toStartOf="@+id/textView4"
                 app:layout_constraintTop_toBottomOf="@+id/textViewPriceViewer" />
 
             <TextView
                 android:id="@+id/textViewDescripcion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="74dp"
+                android:layout_marginTop="10dp"
                 android:text="TextView"
                 app:layout_constraintStart_toStartOf="@+id/textViewTitleViewer"
-                app:layout_constraintTop_toBottomOf="@+id/textViewTitleViewer" />
+                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+
+            <RatingBar
+                android:id="@+id/rating_promedio"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:rating="@{review.rating_average}"
+                android:stepSize="0.1"
+                app:layout_constraintBottom_toBottomOf="@+id/textViewPromedioReview"
+                app:layout_constraintStart_toEndOf="@+id/textViewPromedioReview"
+                app:layout_constraintTop_toTopOf="@+id/textViewPromedioReview" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewReviews"
@@ -84,7 +114,77 @@
                 android:adapter="@{adapteReviews}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textViewDescripcion"
+                app:layout_constraintTop_toBottomOf="@+id/textViewPromedioReview" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:text="@string/peso"
+                android:textSize="22sp"
+                app:layout_constraintStart_toStartOf="@+id/galleryView"
+                app:layout_constraintTop_toBottomOf="@+id/galleryView" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="30dp"
+                android:background="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewDescripcion" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/opiniones_sobre_el_producto"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/textViewDescripcion"
+                app:layout_constraintTop_toBottomOf="@+id/view" />
+
+            <TextView
+                android:id="@+id/textViewPromedioReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="@string/cero"
+                android:textSize="22sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewAtributes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:adapter="@{adapterAttribute}"
+                app:layout_constraintTop_toBottomOf="@+id/textViewTitleViewer"
+                tools:layout_editor_absoluteX="206dp" />
+
+            <View
+                android:id="@+id/viewLine"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerViewAtributes" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/descripci_n"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/viewLine" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

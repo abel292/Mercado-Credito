@@ -11,4 +11,7 @@
     <string name="error_sin_filtro">No se aplico ningun filtro</string>
     <string name="titulo">titulo</string>
     <string name="buscar">Buscar producto</string>
+    <string name="peso">$</string>
+    <string name="opiniones_sobre_el_producto">Opiniones sobre el producto</string>
+    <string name="cero">0.0</string>
 </resources>

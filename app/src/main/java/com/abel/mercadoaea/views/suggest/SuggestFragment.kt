@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.abel.mercadoaea.R
 import com.abel.mercadoaea.data.api.ContsApi
 import com.abel.mercadoaea.data.database.SuggestEntity
-import com.abel.mercadoaea.data.model.search.Result
 import com.abel.mercadoaea.data.model.suggest.ResponseSuggest
 import com.abel.mercadoaea.databinding.FragmentSuggestBinding
 import com.abel.mercadoaea.util.Data
@@ -19,7 +18,6 @@ import com.abel.mercadoaea.util.Status
 import com.abel.mercadoaea.util.StatusMain
 import com.abel.mercadoaea.viewmodel.MainViewModel
 import com.abel.mercadoaea.views.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_suggest.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 

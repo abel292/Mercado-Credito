@@ -12,12 +12,14 @@ class GlideDataBinding {
         fun loadImage(view: ImageView, profileImage: String) {
             Glide.with(view.context)
                 .load(profileImage)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
+                .placeholder(R.drawable.ic_placeholder)
+                .error(R.drawable.ic_placeholder)
                 .override(300, 300)
                 .centerCrop()
                 .into(view)
         }
     }
 
+
 }
+

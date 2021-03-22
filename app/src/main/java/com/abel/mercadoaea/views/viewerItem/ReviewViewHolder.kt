@@ -6,21 +6,18 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.abel.mercadoaea.R
 import com.abel.mercadoaea.data.model.review.Review
+import com.abel.mercadoaea.databinding.ItemReviewBinding
 import com.abel.mercadoaea.util.listeners.OnClickItemRecyclerListener
 
 //todo Holder
-class ReviewViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-    var textViewTitle: TextView = v.findViewById(R.id.item_title)
-    var textViewComment: TextView = v.findViewById(R.id.item_comment)
-    var imageViewCharacter: ImageView = v.findViewById(R.id.item_picture)
+class ReviewViewHolder(private val binding: ItemReviewBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     fun bind(
         review: Review?,
         onClickListener: OnClickItemRecyclerListener<Review>?
     ) {
-        textViewTitle.text = review?.title
-        textViewComment.text = review?.content
-
+        binding.review = review
         itemView.setOnClickListener {
             if (review != null) {
                 onClickListener?.onClick(review)

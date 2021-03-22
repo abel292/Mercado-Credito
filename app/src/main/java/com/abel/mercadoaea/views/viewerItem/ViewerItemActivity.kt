@@ -27,6 +27,7 @@ class ViewerItemActivity : AppCompatActivity() {
     private val viewModel by viewModel<ViewerViewModel>()
     private val galleryAdapter: GalleryAdapter by inject()
     private lateinit var reviewsAdapter: ReviewAdapter
+    private lateinit var atributtesAdapter: AtributtesAdapter
     private lateinit var binding: ActivityViewerItemBinding
     private val itemPictureListener = OnClickItemRecyclerListener<Picture> { picture -> }
 
@@ -34,8 +35,11 @@ class ViewerItemActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_viewer_item)
         binding.recyclerViewReviews.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewAtributes.layoutManager = LinearLayoutManager(this)
         reviewsAdapter = ReviewAdapter()
+        atributtesAdapter = AtributtesAdapter()
         binding.adapteReviews = reviewsAdapter
+        binding.adapterAttribute = atributtesAdapter
         val argIdProduct = ViewerItemActivityArgs.fromBundle(bundle = intent.extras!!).argIdProduct
 
         viewModel.viewerState.observe(::getLifecycle, ::updateUI)
@@ -53,9 +57,9 @@ class ViewerItemActivity : AppCompatActivity() {
     }
 
     private fun configUI(dataItem: Data<ResponseItem>?) {
-        textViewPriceViewer.text = dataItem?.data?.price.toString()
-        textViewTitleViewer.text = dataItem?.data?.title.toString()
         dataItem?.data?.pictures?.let { configGallery(it) }
+        dataItem?.data?.attributes?.let { atributtesAdapter.loadList(it) }
+
     }
 
     private fun configDescription(dataItem: Data<ResponseDescription>) {
@@ -81,6 +85,8 @@ class ViewerItemActivity : AppCompatActivity() {
             Status.SUCCESSFUL -> {
                 dataItem.data?.reviews?.let {
                     reviewsAdapter.loadList(it)
+                    binding.textViewPromedioReview.text =
+                        (dataItem.data?.rating_average ?: 0.0f).toString()
                 }
             }
         }

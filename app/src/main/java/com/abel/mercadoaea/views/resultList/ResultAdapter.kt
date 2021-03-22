@@ -3,6 +3,7 @@ package com.abel.mercadoaea.views.resultList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.abel.mercadoaea.R
 import com.abel.mercadoaea.views.adapter.BaseAdapterLoadMore
@@ -15,18 +16,21 @@ class ResultAdapter : BaseAdapterLoadMore<Result>() {
         return if (list[position] != null) viewItem else viewLoad
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == viewItem) {
-            val v: View = LayoutInflater.from(parent.context).inflate(
-                R.layout.item_suggest, parent, false
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = if (viewType == viewItem) {
+        ResultViewHolder(
+            DataBindingUtil.inflate(
+                LayoutInflater.from(parent.context),
+                R.layout.item_results,
+                parent,
+                false
             )
-            ResultViewHolder(v)
-        } else {
-            val v: View = LayoutInflater.from(parent.context).inflate(
-                R.layout.item_loading_recycler, parent, false
-            )
-            ProgressViewHolder(v)
-        }
+        )
+    } else {
+        val v: View = LayoutInflater.from(parent.context).inflate(
+            R.layout.item_loading_recycler, parent, false
+        )
+        ProgressViewHolder(v)
+
     }
 
     override fun getItemCount(): Int {
