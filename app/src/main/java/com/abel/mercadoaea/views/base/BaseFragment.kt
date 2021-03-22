@@ -2,20 +2,23 @@ package com.abel.mercadoaea.views.base
 
 import android.content.Intent
 import androidx.fragment.app.Fragment
-import androidx.navigation.ActivityNavigator
-import androidx.navigation.NavDirections
-import androidx.navigation.fragment.findNavController
-import com.abel.mercadoaea.data.api.ContsApi
-import com.abel.mercadoaea.data.model.suggest.SuggestedQuery
-import com.abel.mercadoaea.views.home.HomeFragmentDirections
+import com.abel.mercadoaea.views.base.BaseActivity.Companion.KEY_QUERY_EXTRA
 import com.abel.mercadoaea.views.resultList.ResultActivity
-import com.abel.mercadoaea.views.suggest.SuggestFragmentDirections
+import com.abel.mercadoaea.views.viewerItem.ViewerItemActivity
 
 abstract class BaseFragment : Fragment() {
 
     fun showSearchedResult(query: String) {
         val intent = Intent(requireActivity(), ResultActivity::class.java)
-        intent.putExtra(ResultActivity.KEY_QUERY_EXTRA, query)
+        intent.putExtra(KEY_QUERY_EXTRA, query)
         startActivity(intent)
     }
+
+
+    protected fun show(idItem: String) {
+        val intent = Intent(requireActivity(), ViewerItemActivity::class.java)
+        intent.putExtra(BaseActivity.KEY_ID_ITEM, idItem)
+        startActivity(intent)
+    }
+
 }

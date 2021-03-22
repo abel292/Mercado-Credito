@@ -6,6 +6,11 @@
         <variable
             name="adapter"
             type="com.abel.mercadoaea.views.home.CategoryAdapter" />
+
+        <variable
+            name="adapterViewedItem"
+            type="com.abel.mercadoaea.views.home.ViewedItemsAdapter" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:adapter="@{adapterViewedItem}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />

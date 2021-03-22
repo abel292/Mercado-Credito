@@ -11,6 +11,7 @@ import com.abel.mercadoaea.viewmodel.ViewerViewModel
 import com.abel.mercadoaea.views.adapter.GalleryAdapter
 import com.abel.mercadoaea.views.suggest.SuggestAdapter
 import com.abel.mercadoaea.views.suggest.SuggestLocalAdapter
+import com.abel.mercadoaea.views.viewerItem.ReviewAdapter
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.koin.dsl.module
@@ -27,6 +28,7 @@ val moduleApp = module {
     single { SuggestAdapter() }
     single { SuggestLocalAdapter() }
     factory { GalleryAdapter() }
+    factory { ReviewAdapter() }
 }
 
 fun provideMercadoApi(): MercadoApi = Retrofit.Builder()

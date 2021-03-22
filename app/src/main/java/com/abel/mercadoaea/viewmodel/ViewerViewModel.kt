@@ -36,8 +36,8 @@ class ViewerViewModel(private val mercadoRepository: MercadoRepository) : BaseVi
         }
     }
 
-    fun getReview() = launch {
-        mercadoRepository.getReviews("MLA723647586").collect {
+    fun getReview(id: String) = launch {
+        mercadoRepository.getReviews(idItem = id).collect {
             when (it) {
                 is ResultResource.Failure -> {
                     liveDataReview.value =

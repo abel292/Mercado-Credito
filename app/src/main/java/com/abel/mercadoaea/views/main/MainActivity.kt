@@ -11,6 +11,7 @@ import com.abel.mercadoaea.R
 import com.abel.mercadoaea.data.api.ContsApi
 import com.abel.mercadoaea.util.*
 import com.abel.mercadoaea.viewmodel.MainViewModel
+import com.abel.mercadoaea.views.base.BaseActivity
 import com.abel.mercadoaea.views.resultList.ResultActivity
 import com.abel.mercadoaea.views.suggest.SuggestFragmentDirections
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
+class MainActivity : BaseActivity(), SearchView.OnQueryTextListener {
 
     private val viewModel by viewModel<MainViewModel>()
     private val navController: NavController by lazy {
@@ -81,24 +82,21 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     override fun onBackPressed() {
-        when (NavHostFragment.findNavController(nav_host_fragment).currentDestination?.id) {
-            R.id.homeFragment -> {
-                AlertDialog.Builder(this).setMessage("Salir").setPositiveButton(
-                    "Ok"
-                ) { dialogInterface, i ->
-                    finish()
-                }.show()
+        try {
+            when (NavHostFragment.findNavController(nav_host_fragment).currentDestination?.id) {
+                R.id.homeFragment -> {
+                    AlertDialog.Builder(this).setMessage("Salir").setPositiveButton(
+                        "Ok"
+                    ) { dialogInterface, i ->
+                        finish()
+                    }.show()
+                }
+                else -> {
+                    super.onBackPressed()
+                }
             }
-            else -> {
-                super.onBackPressed()
-            }
+        } catch (e: Exception) {
+            onBackPressed()
         }
     }
-
-    private fun showSearchedResult(query: String) {
-        val intent = Intent(this, ResultActivity::class.java)
-        intent.putExtra(ResultActivity.KEY_QUERY_EXTRA, query)
-        startActivity(intent)
-    }
-
 }

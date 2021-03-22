@@ -2,10 +2,17 @@ package com.abel.mercadoaea.views.viewerItem
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.abel.mercadoaea.R
+import com.abel.mercadoaea.data.model.description.ResponseDescription
 import com.abel.mercadoaea.data.model.item.Picture
 import com.abel.mercadoaea.data.model.item.ResponseItem
+import com.abel.mercadoaea.data.model.review.ResponseReview
+import com.abel.mercadoaea.databinding.ActivityResultBinding
+import com.abel.mercadoaea.databinding.ActivityViewerItemBinding
 import com.abel.mercadoaea.util.Data
+import com.abel.mercadoaea.util.Status
 import com.abel.mercadoaea.util.StatusViewer
 import com.abel.mercadoaea.util.ViewerData
 import com.abel.mercadoaea.util.listeners.OnClickItemRecyclerListener
@@ -19,16 +26,25 @@ class ViewerItemActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<ViewerViewModel>()
     private val galleryAdapter: GalleryAdapter by inject()
+    private lateinit var reviewsAdapter: ReviewAdapter
+    private lateinit var binding: ActivityViewerItemBinding
     private val itemPictureListener = OnClickItemRecyclerListener<Picture> { picture -> }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_viewer_item)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_viewer_item)
+        binding.recyclerViewReviews.layoutManager = LinearLayoutManager(this)
+        reviewsAdapter = ReviewAdapter()
+        binding.adapteReviews = reviewsAdapter
         val argIdProduct = ViewerItemActivityArgs.fromBundle(bundle = intent.extras!!).argIdProduct
 
         viewModel.viewerState.observe(::getLifecycle, ::updateUI)
         viewModel.liveDataItem.observe(::getLifecycle, ::configUI)
+        viewModel.liveDataReview.observe(::getLifecycle, ::configReviews)
+        viewModel.liveDataDescription.observe(::getLifecycle, ::configDescription)
         viewModel.getItemComplete(argIdProduct)
+        viewModel.getReview(argIdProduct)
+        viewModel.getDescription(argIdProduct)
     }
 
     override fun onBackPressed() {
@@ -40,6 +56,34 @@ class ViewerItemActivity : AppCompatActivity() {
         textViewPriceViewer.text = dataItem?.data?.price.toString()
         textViewTitleViewer.text = dataItem?.data?.title.toString()
         dataItem?.data?.pictures?.let { configGallery(it) }
+    }
+
+    private fun configDescription(dataItem: Data<ResponseDescription>) {
+        when (dataItem.responseType) {
+            Status.ERROR -> {
+            }
+            Status.EMPTY -> {
+            }
+            Status.SUCCESSFUL -> {
+                dataItem.data?.let {
+                    binding.textViewDescripcion.text = it.plain_text
+                }
+            }
+        }
+    }
+
+    private fun configReviews(dataItem: Data<ResponseReview>) {
+        when (dataItem.responseType) {
+            Status.ERROR -> {
+            }
+            Status.EMPTY -> {
+            }
+            Status.SUCCESSFUL -> {
+                dataItem.data?.reviews?.let {
+                    reviewsAdapter.loadList(it)
+                }
+            }
+        }
     }
 
     private fun updateUI(data: ViewerData) {

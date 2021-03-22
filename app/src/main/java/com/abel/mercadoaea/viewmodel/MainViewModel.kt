@@ -3,6 +3,7 @@ package com.abel.mercadoaea.viewmodel
 import androidx.lifecycle.MutableLiveData
 import com.abel.mercadoaea.data.api.ContsApi.Companion.MODO_CATEGORY
 import com.abel.mercadoaea.data.api.ContsApi.Companion.MODO_QUERY
+import com.abel.mercadoaea.data.database.ItemEntity
 import com.abel.mercadoaea.data.database.SuggestEntity
 import com.abel.mercadoaea.data.model.category.ResponseCategory
 import com.abel.mercadoaea.data.model.search.ResponseSearch
@@ -20,7 +21,7 @@ class MainViewModel(private val mercadoRepository: MercadoRepository) : BaseView
     var liveDataSuggest: MutableLiveData<Data<ResponseSuggest>> = MutableLiveData()
     var mainState: MutableLiveData<MainData> = MutableLiveData()
     val liveDataCategory = MutableLiveData<Data<ResponseCategory>>()
-    val liveDataLastViewed = MutableLiveData<Data<ResponseCategory>>()
+    val liveDataLastViewedSeed = MutableLiveData<Data<List<ItemEntity>>>()
     val liveDataLastSearched = MutableLiveData<Data<List<SuggestEntity>>>()
 
     //endregion
@@ -32,6 +33,15 @@ class MainViewModel(private val mercadoRepository: MercadoRepository) : BaseView
     //endregion
 
     //region todo DATA
+
+    fun getLastItemViewed() = launch {
+        val listViewed = mercadoRepository.getHistoryViewed()
+        if (listViewed.isNullOrEmpty()) {
+            liveDataLastViewedSeed.value = Data(responseType = Status.EMPTY)
+        } else {
+            liveDataLastViewedSeed.value = Data(responseType = Status.SUCCESSFUL, listViewed)
+        }
+    }
 
     fun getCategory() = launch {
         mercadoRepository.getCategoryApi().collect {
