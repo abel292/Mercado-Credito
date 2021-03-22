@@ -18,10 +18,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/constraintLayout3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp">
+            android:padding="10dp"
+            app:layoutDescription="@xml/fragment_home_xml_constraintlayout3_scene">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/contentLastSeen"
@@ -96,7 +98,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.motion.widget.MotionLayout>
 
     </androidx.core.widget.NestedScrollView>
 </layout>

@@ -73,6 +73,7 @@ class HomeFragment : BaseFragment() {
             Status.SUCCESSFUL -> {
                 data.data?.let {
                     adapter.loadList(it)
+                    binding.constraintLayout3.transitionToEnd()
                 }
             }
         }

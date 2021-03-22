@@ -11,6 +11,8 @@
     <color name="primary">#75CCDE</color>
     <color name="secondary">#7681F5</color>
     <color name="tree">#B1CCCB</color>
+    <color name="invisible">#00B1CCCB</color>
+    <color name="fore">#7EB1CCCB</color>
     <color name="price">#AEE86F</color>
     <color name="fondo_transp">#2AAEE86F</color>
 
