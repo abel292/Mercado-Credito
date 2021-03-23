@@ -24,7 +24,6 @@ class SplashActivity : BaseActivity() {
         binding.floatingActionButton.setOnClick {
             goToMainActivity()
         }
-
     }
 
     private fun goToMainActivity() {

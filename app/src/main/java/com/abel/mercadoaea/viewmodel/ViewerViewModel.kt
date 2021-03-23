@@ -1,8 +1,6 @@
 package com.abel.mercadoaea.viewmodel
 
-import android.view.View
 import androidx.lifecycle.MutableLiveData
-import com.abel.mercadoaea.data.model.description.ResponseDescription
 import com.abel.mercadoaea.data.model.item.ResponseItem
 import com.abel.mercadoaea.data.model.review.ResponseReview
 import com.abel.mercadoaea.data.repositories.MercadoRepository
@@ -23,13 +21,7 @@ class ViewerViewModel(private val mercadoRepository: MercadoRepository) : BaseVi
     val liveDataItem = MutableLiveData<Data<ResponseItem>>()
     val loadingVisibility: MutableLiveData<Int> = MutableLiveData()
 
-
     //endregion
-
-    fun hideLoading() = launch {
-        loadingVisibility.value = View.GONE
-    }
-
 
     fun getReview(id: String) = launch {
         mercadoRepository.getReviews(idItem = id).collect {

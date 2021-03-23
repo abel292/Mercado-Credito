@@ -140,8 +140,6 @@ class MainViewModel(private val mercadoRepository: MercadoRepository) : BaseView
                     )
             }
         }
-
-
     }
     //endregion
 }

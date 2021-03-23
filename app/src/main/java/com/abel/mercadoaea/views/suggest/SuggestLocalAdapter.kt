@@ -33,7 +33,6 @@ class SuggestLocalAdapter : BaseAdapterLoadMore<SuggestEntity>() {
             ProgressViewHolder(v)
         }
 
-
     override fun getItemCount(): Int {
         return list.size
     }

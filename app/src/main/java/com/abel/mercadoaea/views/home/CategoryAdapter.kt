@@ -33,7 +33,6 @@ class CategoryAdapter : BaseAdapterLoadMore<ResponseCategoryItem>() {
             ProgressViewHolder(v)
         }
 
-
     override fun getItemCount(): Int {
         return list.size
     }

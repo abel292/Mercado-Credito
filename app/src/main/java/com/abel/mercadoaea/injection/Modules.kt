@@ -31,17 +31,6 @@ val moduleApp = module {
     factory { ReviewAdapter() }
 }
 
-fun provideMercadoApi(): MercadoApi = Retrofit.Builder()
-    .baseUrl(BuildConfig.BASE_URL)
-    .addConverterFactory(GsonConverterFactory.create(getGson()))
-    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-    .build()
-    .create(MercadoApi::class.java)
-
-fun getGson(): Gson = GsonBuilder()
-    .setLenient()
-    .create()
-
 val databaseModule = module {
     single {
         val db: AppDatabase = get()
@@ -59,3 +48,15 @@ val moduleViewModels = module {
     viewModel { MainViewModel(get()) }
     viewModel { ViewerViewModel(get()) }
 }
+
+
+fun provideMercadoApi(): MercadoApi = Retrofit.Builder()
+    .baseUrl(BuildConfig.BASE_URL)
+    .addConverterFactory(GsonConverterFactory.create(getGson()))
+    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+    .build()
+    .create(MercadoApi::class.java)
+
+fun getGson(): Gson = GsonBuilder()
+    .setLenient()
+    .create()

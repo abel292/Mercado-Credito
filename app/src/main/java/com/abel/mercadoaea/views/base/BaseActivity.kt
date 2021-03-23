@@ -8,13 +8,11 @@ import com.abel.mercadoaea.views.viewerItem.ViewerItemActivity
 
 abstract class BaseActivity : AppCompatActivity() {
 
-
     protected fun show(idItem: String) {
         val intent = Intent(this, ViewerItemActivity::class.java)
         intent.putExtra(KEY_ID_ITEM, idItem)
         startActivity(intent)
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-
     }
 
     protected fun showSearchedResult(query: String) {

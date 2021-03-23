@@ -54,7 +54,6 @@ class ResultActivity : BaseActivity(), OnLoadMoreListener {
         }
     }
 
-
     override fun onLoadMore(offset: Int) {
         adapter.modeLoading()
         viewModel.searchItems(query, offset = offset)

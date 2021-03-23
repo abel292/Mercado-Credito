@@ -26,7 +26,6 @@ class ReviewAdapter : BaseAdapterLoadMore<Review>() {
             ProgressViewHolder(v)
         }
 
-
     override fun getItemCount(): Int {
         return list.size
     }

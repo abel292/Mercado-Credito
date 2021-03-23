@@ -8,7 +8,7 @@ import com.abel.mercadoaea.views.viewerItem.ViewerItemActivity
 
 abstract class BaseFragment : Fragment() {
 
-    fun showSearchedResult(query: String) {
+    protected fun showSearchedResult(query: String) {
         val intent = Intent(requireActivity(), ResultActivity::class.java)
         intent.putExtra(KEY_QUERY_EXTRA, query)
         startActivity(intent)

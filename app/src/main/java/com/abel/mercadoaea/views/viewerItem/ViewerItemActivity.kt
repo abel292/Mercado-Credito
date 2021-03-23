@@ -1,6 +1,7 @@
 package com.abel.mercadoaea.views.viewerItem
 
 import android.content.Intent
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
@@ -60,7 +61,9 @@ class ViewerItemActivity : AppCompatActivity() {
             item.data?.attributes?.let { atributtesAdapter.loadList(it) }
             binding.item = item.data
         }
-        viewModel.hideLoading()
+        if (binding.constraintLayout5.currentState == binding.constraintLayout5.startState) {
+            binding.constraintLayout5.transitionToEnd()
+        }
     }
 
     private fun configReviews(dataItem: Data<ResponseReview>) {
