@@ -63,6 +63,10 @@ class ViewerItemActivity : AppCompatActivity() {
         }
         if (binding.constraintLayout5.currentState == binding.constraintLayout5.startState) {
             binding.constraintLayout5.transitionToEnd()
+            binding.scrollView.post {
+                binding.scrollView.fling(0)
+                binding.scrollView.smoothScrollTo(0, 0)
+            }
         }
     }
 
@@ -80,6 +84,10 @@ class ViewerItemActivity : AppCompatActivity() {
                     binding.ratingPromedio.rating = dataItem.data?.rating_average ?: 0.0f
                 }
             }
+        }
+        binding.scrollView.post {
+            binding.scrollView.fling(0)
+            binding.scrollView.smoothScrollTo(0, 0)
         }
     }
 
